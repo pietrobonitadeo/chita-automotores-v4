@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { width: 100%; min-height: 100%; scroll-behavior: smooth; }
+  body {
+    background: #0d1425;
+    color: #ffffff;
+    font-family: var(--font-body), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  main { width: 100%; }
+}
+
+/* ── Shimmer button ─────────────────────────────────────────── */
+.shimmer-btn {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255,255,255,0.18) 50%,
+    transparent 70%
+  );
+  transform: translateX(-130%) skewX(-20deg);
+}
+.shimmer-btn:hover::before {
+  animation: shimmer 0.7s ease forwards;
+}
+@keyframes shimmer {
+  to { transform: translateX(150%) skewX(-20deg); }
+}
+
+/* ── Infinite marquee ───────────────────────────────────────── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* ── 404 glitch ─────────────────────────────────────────────── */
+@keyframes glitch-1 {
+  0%,100% { clip-path: inset(0 0 88% 0); transform: translate(-3px,0); }
+  25%      { clip-path: inset(25% 0 50% 0); transform: translate(3px,0); }
+  50%      { clip-path: inset(55% 0 20% 0); transform: translate(-2px,0); }
+  75%      { clip-path: inset(75% 0 5% 0);  transform: translate(2px,0); }
+}
+@keyframes glitch-2 {
+  0%,100% { clip-path: inset(80% 0 0 0);   transform: translate(3px,0) scaleX(1.02); }
+  25%      { clip-path: inset(50% 0 35% 0); transform: translate(-3px,0); }
+  50%      { clip-path: inset(20% 0 65% 0); transform: translate(2px,0); }
+  75%      { clip-path: inset(5% 0 80% 0);  transform: translate(-2px,0); }
+}
+
+/* ── Mobile menu overlay ────────────────────────────────────── */
+.mobile-menu-enter { opacity: 0; transform: translateY(-12px); }
+.mobile-menu-enter-active { opacity: 1; transform: translateY(0); transition: all 0.3s; }
+
+/* ── Autos carousel (mobile) ────────────────────────────────── */
+.autos-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  gap: 12px;
+  padding: 0 20px 16px;
+  scrollbar-width: none;
+}
+.autos-carousel::-webkit-scrollbar { display: none; }
+.autos-carousel-card {
+  flex: 0 0 72vw;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 1024px) {
+  .autos-carousel {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    overflow-x: visible;
+    padding: 0;
+    gap: 16px;
+  }
+  .autos-carousel-card {
+    flex: unset;
+  }
+}
