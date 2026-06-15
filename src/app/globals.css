@@ -66,31 +66,9 @@
 .mobile-menu-enter { opacity: 0; transform: translateY(-12px); }
 .mobile-menu-enter-active { opacity: 1; transform: translateY(0); transition: all 0.3s; }
 
-/* ── Autos carousel (mobile) ────────────────────────────────── */
-.autos-carousel {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
+/* ── Fleet carousel ─────────────────────────────────────────── */
+.fleet-track {
   -webkit-overflow-scrolling: touch;
-  gap: 12px;
-  padding: 0 20px 16px;
   scrollbar-width: none;
 }
-.autos-carousel::-webkit-scrollbar { display: none; }
-.autos-carousel-card {
-  flex: 0 0 72vw;
-  scroll-snap-align: start;
-}
-
-@media (min-width: 1024px) {
-  .autos-carousel {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    overflow-x: visible;
-    padding: 0;
-    gap: 16px;
-  }
-  .autos-carousel-card {
-    flex: unset;
-  }
-}
+.fleet-track::-webkit-scrollbar { display: none; }

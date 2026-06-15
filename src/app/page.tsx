@@ -402,77 +402,118 @@ const AUTOS = [
   { marca: "VOLKSWAGEN", modelo: "Vento",        version: "Tech Comfortline",     anio: "2017", km: "174.000", tipo: "USADO" as const, imagen: p("volkswagen vento tech comfotline 2017 174 mil km.webp")         },
 ]
 
-function AutoCard({ auto, index }: { auto: (typeof AUTOS)[0]; index: number }) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: "-40px" })
+function FleetCard({ auto }: { auto: (typeof AUTOS)[0] }) {
   const [imgError, setImgError] = useState(false)
-
   const accent = auto.tipo === "0KM" ? BLUE : RED
 
   return (
-    <motion.div
-      ref={ref}
-      initial={false}
-      whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-      style={{ position: "relative", borderRadius: 8, overflow: "hidden", cursor: "pointer", aspectRatio: "3/4" }}
+    <div
+      className="fleet-card"
+      style={{
+        flex: "0 0 380px",
+        height: 240,
+        borderRadius: 12,
+        background: `linear-gradient(135deg, #080f1e 0%, #0b1626 100%)`,
+        border: `1px solid ${BLUE}18`,
+        position: "relative",
+        overflow: "hidden",
+        scrollSnapAlign: "start",
+      }}
     >
-      {/* Full image background */}
+      {/* Accent line top */}
+      <div style={{ position: "absolute", top: 0, left: 0, width: "50%", height: 2, background: `linear-gradient(90deg, ${accent}, transparent)` }} />
+
+      {/* Car image — right side, uses contain to respect transparency */}
       {!imgError ? (
-        <Image
-          src={auto.imagen}
-          alt={`${auto.marca} ${auto.modelo}`}
-          fill
-          loading="lazy"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          style={{ objectFit: "cover", objectPosition: "center" }}
-          onError={() => setImgError(true)}
-        />
+        <div style={{ position: "absolute", right: "-4%", top: 0, bottom: 0, width: "64%", pointerEvents: "none" }}>
+          <Image
+            src={auto.imagen}
+            alt={`${auto.marca} ${auto.modelo}`}
+            fill
+            loading="lazy"
+            style={{ objectFit: "contain", objectPosition: "center right" }}
+            onError={() => setImgError(true)}
+          />
+        </div>
       ) : (
-        <div style={{ position: "absolute", inset: 0, background: "#07101f", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <Car size={60} style={{ color: `${BLUE}30` }} />
+        <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "60%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Car size={72} style={{ color: `${BLUE}20` }} />
         </div>
       )}
 
-      {/* Gradient overlay bottom */}
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(2,8,22,0.97) 0%, rgba(2,8,22,0.5) 45%, transparent 100%)" }} />
+      {/* Gradient: opaque left → transparent right */}
+      <div style={{
+        position: "absolute", inset: 0,
+        background: `linear-gradient(to right, #080f1e 32%, rgba(8,15,30,0.82) 52%, rgba(8,15,30,0.1) 78%, transparent 100%)`,
+        pointerEvents: "none",
+      }} />
 
-      {/* Tipo badge */}
-      <span style={{ position: "absolute", top: 14, left: 14, background: accent, fontFamily: DISPLAY, fontWeight: 700, fontSize: 10, letterSpacing: "0.1em", padding: "4px 12px", clipPath: "polygon(0 0, calc(100% - 6px) 0, 100% 100%, 6px 100%)", color: "#fff" }}>
-        {auto.tipo}
-      </span>
+      {/* Info — left column */}
+      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "52%", display: "flex", flexDirection: "column", justifyContent: "center", padding: "20px 24px" }}>
+        {/* Tipo badge */}
+        <span style={{
+          alignSelf: "flex-start",
+          background: accent, color: "#fff",
+          fontFamily: DISPLAY, fontWeight: 700, fontSize: 9, letterSpacing: "0.14em",
+          padding: "3px 10px",
+          clipPath: "polygon(0 0, calc(100% - 5px) 0, 100% 100%, 5px 100%)",
+          marginBottom: 12,
+        }}>
+          {auto.tipo}
+        </span>
 
-      {/* Text content */}
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 20px 16px" }}>
-        <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 10, color: accent, letterSpacing: "0.14em", marginBottom: 2 }}>{auto.marca}</div>
-        <div style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: 22, lineHeight: 1.1, marginBottom: 2 }}>{auto.modelo}</div>
-        <div style={{ fontFamily: BODY, fontSize: 12, color: "rgba(255,255,255,0.45)", marginBottom: 12 }}>{auto.version}</div>
+        <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 10, color: accent, letterSpacing: "0.14em", marginBottom: 3 }}>
+          {auto.marca}
+        </div>
+        <div style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: 26, lineHeight: 1, marginBottom: 4 }}>
+          {auto.modelo}
+        </div>
+        <div style={{ fontFamily: BODY, fontSize: 11, color: "rgba(255,255,255,0.38)", marginBottom: 14 }}>
+          {auto.version}
+        </div>
 
-        <div style={{ display: "flex", gap: 16, marginBottom: 14 }}>
-          <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 13, color: "rgba(255,255,255,0.7)" }}>{auto.anio}</div>
-          <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 13, color: "rgba(255,255,255,0.7)" }}>{auto.km === "0" ? "0 KM" : `${auto.km} km`}</div>
+        <div style={{ display: "flex", gap: 14, marginBottom: 18 }}>
+          <span style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 12, color: "rgba(255,255,255,0.6)" }}>{auto.anio}</span>
+          <span style={{ color: "rgba(255,255,255,0.18)" }}>·</span>
+          <span style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 12, color: "rgba(255,255,255,0.6)" }}>{auto.km === "0" ? "0 KM" : `${auto.km} km`}</span>
         </div>
 
         <a
           href={`https://wa.me/5493442647442?text=Hola! Me interesa el ${auto.marca} ${auto.modelo} ${auto.anio}`}
           target="_blank" rel="noopener noreferrer"
-          style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: accent, color: "#fff", fontFamily: DISPLAY, fontWeight: 700, fontSize: 12, letterSpacing: "0.08em", padding: "10px", textDecoration: "none", borderRadius: 4 }}
+          style={{
+            alignSelf: "flex-start",
+            display: "inline-flex", alignItems: "center", gap: 6,
+            background: accent, color: "#fff",
+            fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, letterSpacing: "0.08em",
+            padding: "8px 16px", borderRadius: 4, textDecoration: "none",
+          }}
         >
-          <MessageCircle size={13} /> CONSULTAR
+          <MessageCircle size={11} /> CONSULTAR
         </a>
       </div>
-    </motion.div>
+    </div>
   )
 }
 
-function AutosSection() {
-  const [filter, setFilter] = useState<"TODOS" | "0KM" | "USADO">("TODOS")
-  const [showAll, setShowAll] = useState(false)
-  const filtered = AUTOS.filter(a => filter === "TODOS" || a.tipo === filter)
-  const visible = showAll ? filtered : filtered.slice(0, 12)
+function FleetSection() {
+  const trackRef = useRef<HTMLDivElement>(null)
+
+  const scroll = (dir: "left" | "right") => {
+    const track = trackRef.current
+    if (!track) return
+    const card = track.querySelector(".fleet-card") as HTMLElement
+    const amount = card ? card.offsetWidth + 16 : 396
+    track.scrollBy({ left: dir === "right" ? amount : -amount, behavior: "smooth" })
+  }
+
+  const fleet = AUTOS.slice(0, 10)
 
   return (
     <section id="vehiculos" style={{ background: DARK, padding: "96px 0" }}>
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
+
+        {/* Header */}
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 24, marginBottom: 48 }}>
           <div>
             <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 8 }}>STOCK DISPONIBLE</div>
@@ -481,45 +522,51 @@ function AutosSection() {
             </h2>
           </div>
 
-          {/* Filter tabs */}
-          <div style={{ display: "flex", gap: 6 }}>
-            {(["TODOS", "0KM", "USADO"] as const).map(f => (
+          {/* Navigation arrows */}
+          <div className="hidden md:flex" style={{ gap: 8 }}>
+            {(["left", "right"] as const).map(dir => (
               <button
-                key={f}
-                onClick={() => setFilter(f)}
+                key={dir}
+                onClick={() => scroll(dir)}
                 style={{
-                  fontFamily: DISPLAY, fontWeight: 700, fontSize: 12, letterSpacing: "0.1em",
-                  padding: "8px 18px", borderRadius: 4, border: "1.5px solid",
-                  cursor: "pointer", transition: "all 0.2s",
-                  background: filter === f ? BLUE : "transparent",
-                  borderColor: filter === f ? BLUE : "rgba(255,255,255,0.15)",
-                  color: filter === f ? "#fff" : "rgba(255,255,255,0.5)",
+                  width: 44, height: 44, borderRadius: "50%",
+                  border: `1.5px solid ${BLUE}35`,
+                  background: "transparent", color: "rgba(255,255,255,0.5)",
+                  cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+                  transition: "border-color 0.2s, color 0.2s, background 0.2s",
                 }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = BLUE; e.currentTarget.style.color = "#fff"; e.currentTarget.style.background = `${BLUE}18` }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = `${BLUE}35`; e.currentTarget.style.color = "rgba(255,255,255,0.5)"; e.currentTarget.style.background = "transparent" }}
               >
-                {f}
+                <ArrowRight size={16} style={{ transform: dir === "left" ? "rotate(180deg)" : "none" }} />
               </button>
             ))}
           </div>
         </div>
 
-        <div className="autos-carousel">
-          {visible.map((auto, i) => (
-            <div key={`${auto.marca}-${auto.modelo}-${auto.anio}`} className="autos-carousel-card">
-              <AutoCard auto={auto} index={i} />
-            </div>
+        {/* Scrollable track */}
+        <div
+          ref={trackRef}
+          className="fleet-track"
+          style={{
+            display: "flex",
+            overflowX: "auto",
+            gap: 16,
+            scrollSnapType: "x mandatory",
+            paddingBottom: 4,
+          }}
+        >
+          {fleet.map(auto => (
+            <FleetCard key={`${auto.marca}-${auto.modelo}-${auto.anio}`} auto={auto} />
           ))}
         </div>
 
-        {filtered.length > 12 && (
-          <div style={{ textAlign: "center", marginTop: 40 }}>
-            <button
-              onClick={() => setShowAll(v => !v)}
-              style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 13, color: BLUE, letterSpacing: "0.08em", display: "inline-flex", alignItems: "center", gap: 6, paddingBottom: 2, background: "none", border: "none", borderBottom: `1px solid ${BLUE}40`, cursor: "pointer" }}
-            >
-              {showAll ? "VER MENOS" : `VER TODO EL STOCK (${filtered.length - 12} más)`} <ArrowRight size={14} style={{ transform: showAll ? "rotate(270deg)" : "rotate(90deg)", transition: "transform 0.2s" }} />
-            </button>
-          </div>
-        )}
+        {/* Scroll hint — mobile only */}
+        <div className="flex md:hidden" style={{ alignItems: "center", gap: 6, marginTop: 14 }}>
+          <ArrowRight size={11} style={{ color: "rgba(255,255,255,0.22)" }} />
+          <span style={{ fontFamily: BODY, fontSize: 11, color: "rgba(255,255,255,0.22)" }}>Deslizá para ver más</span>
+        </div>
+
       </div>
     </section>
   )
@@ -985,7 +1032,7 @@ export default function Page() {
       <TopBar />
       <HeroSection />
       <BrandStrip />
-      <AutosSection />
+      <FleetSection />
       <BentoSection />
       <TestimonialsSection />
       <TelepaseBanner />
