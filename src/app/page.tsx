@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence, useInView } from "framer-motion"
 import Image from "next/image"
 import {
-  MapPin, Clock, Car, Shield, CheckCircle, X, MessageCircle,
-  Star, ArrowRight, RefreshCw, CreditCard, Award, TrendingUp,
+  MapPin, Clock, Car, CheckCircle, X, MessageCircle,
+  Star, ArrowRight, RefreshCw, CreditCard,
   ChevronDown, Menu, FileText, Zap,
 } from "lucide-react"
 
@@ -14,7 +14,10 @@ const BODY    = "var(--font-body)"
 const BLUE    = "#1a44d4"
 const RED     = "#CC1122"
 const DARK    = "#0d1425"
-const DARKER  = "#091020"
+const BG      = "#ffffff"
+const BG2     = "#f5f6fa"
+const TEXT2   = "rgba(13,20,37,0.52)"
+const BORDER  = "rgba(13,20,37,0.08)"
 
 // URL-encodes filenames from /public/imagenes autos/
 const p = (f: string) => `/imagenes%20autos/${f.replace(/ /g, "%20")}`
@@ -78,11 +81,11 @@ function TopBar() {
   }, [])
 
   const links = [
-    { label: "INICIO",      href: "#inicio"      },
-    { label: "VEHÍCULOS",   href: "#vehiculos"   },
-    { label: "FINANCIACIÓN",href: "#financiacion"},
-    { label: "GESTORÍA",    href: "#gestoria"    },
-    { label: "CONTACTO",    href: "#contacto"    },
+    { label: "INICIO",       href: "#inicio"       },
+    { label: "VEHÍCULOS",    href: "#vehiculos"    },
+    { label: "FINANCIACIÓN", href: "#financiacion" },
+    { label: "GESTORÍA",     href: "#gestoria"     },
+    { label: "CONTACTO",     href: "#contacto"     },
   ]
 
   return (
@@ -97,7 +100,7 @@ function TopBar() {
             transition={{ duration: 0.25 }}
             style={{
               position: "fixed", inset: 0, zIndex: 48,
-              background: "rgba(2,8,19,0.97)",
+              background: "rgba(255,255,255,0.98)",
               backdropFilter: "blur(16px)",
               display: "flex", flexDirection: "column",
               alignItems: "center", justifyContent: "center", gap: 28,
@@ -105,7 +108,7 @@ function TopBar() {
           >
             <button
               onClick={() => setMobileOpen(false)}
-              style={{ position: "absolute", top: 24, right: 24, background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.6)" }}
+              style={{ position: "absolute", top: 24, right: 24, background: "none", border: "none", cursor: "pointer", color: TEXT2, padding: 4, display: "flex" }}
             >
               <X size={24} />
             </button>
@@ -114,7 +117,7 @@ function TopBar() {
                 key={label}
                 href={href}
                 onClick={() => setMobileOpen(false)}
-                style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: 32, color: "#fff", textDecoration: "none", letterSpacing: "0.06em" }}
+                style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: 32, color: DARK, textDecoration: "none", letterSpacing: "0.06em" }}
               >
                 {label}
               </a>
@@ -139,14 +142,14 @@ function TopBar() {
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3 }}
               className="hidden md:block"
-              style={{ overflow: "hidden", background: "rgba(4,7,28,0.97)", borderBottom: `1px solid ${BLUE}30` }}
+              style={{ overflow: "hidden", background: BG2, borderBottom: `1px solid ${BORDER}` }}
             >
               <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", height: 36, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: BODY, fontSize: 12, color: "rgba(255,255,255,0.52)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, fontFamily: BODY, fontSize: 12, color: TEXT2 }}>
                   <span style={{ width: 6, height: 6, borderRadius: "50%", background: BLUE, display: "inline-block", flexShrink: 0 }} />
                   Lun–Vie 9:00–17:00 &nbsp;·&nbsp; Sáb 8:30–12:00 &nbsp;·&nbsp; Gral. Galarza 1712, Concepción del Uruguay
                 </div>
-                <button onClick={() => setShowBar(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.3)", padding: 4, display: "flex" }}>
+                <button onClick={() => setShowBar(false)} style={{ background: "none", border: "none", cursor: "pointer", color: TEXT2, padding: 4, display: "flex" }}>
                   <X size={13} />
                 </button>
               </div>
@@ -156,11 +159,11 @@ function TopBar() {
 
         {/* Navbar */}
         <nav style={{
-          background: scrolled ? "rgba(4,7,28,0.92)" : "transparent",
+          background: scrolled ? "rgba(255,255,255,0.95)" : BG,
           backdropFilter: scrolled ? "blur(28px)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(28px)" : "none",
-          borderBottom: scrolled ? `1px solid ${BLUE}20` : "none",
-          transition: "background 0.4s, border-color 0.4s",
+          borderBottom: `1px solid ${BORDER}`,
+          transition: "background 0.4s",
         }}>
           <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", height: 60, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             {/* Logo */}
@@ -174,9 +177,9 @@ function TopBar() {
                 <a
                   key={label}
                   href={href}
-                  style={{ padding: "6px 14px", borderRadius: 999, color: "rgba(255,255,255,0.62)", textDecoration: "none", transition: "color 0.2s, background 0.2s" }}
-                  onMouseEnter={e => { e.currentTarget.style.color = "#fff"; e.currentTarget.style.background = "rgba(255,255,255,0.07)" }}
-                  onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.62)"; e.currentTarget.style.background = "transparent" }}
+                  style={{ padding: "6px 14px", borderRadius: 999, color: TEXT2, textDecoration: "none", transition: "color 0.2s, background 0.2s" }}
+                  onMouseEnter={e => { e.currentTarget.style.color = DARK; e.currentTarget.style.background = BG2 }}
+                  onMouseLeave={e => { e.currentTarget.style.color = TEXT2; e.currentTarget.style.background = "transparent" }}
                 >
                   {label}
                 </a>
@@ -196,12 +199,10 @@ function TopBar() {
             </a>
 
             {/* Hamburger */}
-            <button className="flex md:hidden" onClick={() => setMobileOpen(true)} style={{ background: "none", border: "none", cursor: "pointer", color: "#fff", padding: 4 }}>
+            <button className="flex md:hidden" onClick={() => setMobileOpen(true)} style={{ background: "none", border: "none", cursor: "pointer", color: DARK, padding: 4 }}>
               <Menu size={24} />
             </button>
           </div>
-
-          {scrolled && <div style={{ height: 2, background: `linear-gradient(90deg, transparent, ${BLUE}55, transparent)` }} />}
         </nav>
       </div>
     </>
@@ -215,21 +216,29 @@ function HeroSection() {
       id="inicio"
       style={{
         minHeight: "100vh",
-        background: `linear-gradient(150deg, #020d1f 0%, ${DARK} 45%, #071030 100%)`,
+        background: BG,
         display: "flex", alignItems: "center",
         position: "relative", overflow: "hidden",
       }}
     >
-      {/* Diagonal background wash */}
+      {/* Dot grid texture */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none",
-        background: `linear-gradient(125deg, transparent 38%, ${BLUE}0c 62%, ${BLUE}1a 100%)`,
-        clipPath: "polygon(42% 0%, 100% 0%, 100% 100%, 28% 100%)",
+        backgroundImage: `radial-gradient(circle, ${DARK}12 1.5px, transparent 1.5px)`,
+        backgroundSize: "30px 30px",
       }} />
 
-      {/* Diagonal slash motif — from flyer */}
-      <div style={{ position: "absolute", top: "16%", left: "41%", width: 2, height: "75%", background: `linear-gradient(to bottom, transparent, ${BLUE}38, transparent)`, transform: "rotate(-12deg)" }} />
-      <div style={{ position: "absolute", top: "22%", left: "43.5%", width: 1, height: "62%", background: `linear-gradient(to bottom, transparent, ${RED}28, transparent)`, transform: "rotate(-12deg)" }} />
+      {/* Blue wash — right panel */}
+      <div style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        background: `linear-gradient(125deg, transparent 36%, ${BLUE}0d 58%, ${BLUE}1a 100%)`,
+        clipPath: "polygon(40% 0%, 100% 0%, 100% 100%, 26% 100%)",
+      }} />
+
+      {/* Diagonal slash motifs — visible */}
+      <div style={{ position: "absolute", top: "12%", left: "40%", width: 3, height: "80%", background: `linear-gradient(to bottom, transparent, ${BLUE}45, transparent)`, transform: "rotate(-12deg)" }} />
+      <div style={{ position: "absolute", top: "18%", left: "43%", width: 1.5, height: "66%", background: `linear-gradient(to bottom, transparent, ${RED}40, transparent)`, transform: "rotate(-12deg)" }} />
+      <div style={{ position: "absolute", top: "8%", left: "37%", width: 1, height: "50%", background: `linear-gradient(to bottom, transparent, ${BLUE}22, transparent)`, transform: "rotate(-12deg)" }} />
 
       {/* Car — absolute behind content, hidden on mobile */}
       <motion.div
@@ -237,7 +246,7 @@ function HeroSection() {
         className="hidden lg:block"
         style={{ position: "absolute", right: "-4%", bottom: 0, width: "65%", zIndex: 0, pointerEvents: "none" }}
       >
-        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "80%", height: "80%", background: `radial-gradient(ellipse, ${BLUE}22 0%, transparent 68%)`, pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "80%", height: "80%", background: `radial-gradient(ellipse, ${BLUE}18 0%, transparent 68%)`, pointerEvents: "none" }} />
         <div style={{ position: "absolute", bottom: "8%", left: "6%", right: "6%", height: 2, background: `linear-gradient(90deg, transparent, ${RED}99, transparent)` }} />
         <Image
           src="/baic%20bj30%20fondo%20transparente%202.0.webp"
@@ -245,25 +254,29 @@ function HeroSection() {
           width={900}
           height={600}
           priority
-          style={{ width: "100%", height: "auto", display: "block" }}
+          style={{ width: "100%", height: "auto", display: "block", filter: "drop-shadow(0px 28px 32px rgba(13,20,37,0.22)) drop-shadow(0px 8px 12px rgba(13,20,37,0.12))" }}
         />
       </motion.div>
 
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "clamp(100px, 18vw, 160px) 24px clamp(48px, 8vw, 80px)", width: "100%", position: "relative", zIndex: 1 }}>
         <div style={{ maxWidth: 600 }}>
-          <motion.h1
+
+          {/* Title block with left accent */}
+          <motion.div
             initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.1 }}
-            style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(36px, 9vw, 92px)", lineHeight: 0.92, letterSpacing: "-0.01em", marginBottom: 24, textTransform: "uppercase" }}
+            style={{ borderLeft: `5px solid ${RED}`, paddingLeft: 20, marginBottom: 24 }}
           >
-            TU PRÓXIMO
-            <br />
-            AUTO,{" "}
-            <em style={{ color: RED, fontStyle: "italic" }}>ESTÁ ACÁ.</em>
-          </motion.h1>
+            <h1 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(36px, 9vw, 92px)", lineHeight: 0.92, letterSpacing: "-0.01em", textTransform: "uppercase", color: DARK, margin: 0 }}>
+              TU PRÓXIMO
+              <br />
+              AUTO,{" "}
+              <em style={{ color: RED, fontStyle: "italic" }}>ESTÁ ACÁ.</em>
+            </h1>
+          </motion.div>
 
           <motion.p
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.22 }}
-            style={{ fontFamily: BODY, fontSize: 16, color: "rgba(255,255,255,0.52)", lineHeight: 1.7, marginBottom: 36, maxWidth: 440 }}
+            style={{ fontFamily: BODY, fontSize: 16, color: TEXT2, lineHeight: 1.7, marginBottom: 36, maxWidth: 440 }}
           >
             40 años en Concepción del Uruguay. Tomamos tu usado como parte de pago y financiamos para que llegues a tu próximo auto sin vueltas.
           </motion.p>
@@ -293,18 +306,18 @@ function HeroSection() {
           {/* Trust stats */}
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.55 }}
-            style={{ display: "flex", gap: 32, paddingTop: 22, borderTop: "1px solid rgba(255,255,255,0.07)" }}
+            style={{ display: "flex", gap: 32, paddingTop: 22, borderTop: `1px solid ${BORDER}` }}
           >
             {[
-              { value: 40,   suffix: "",    label: "Años de trayectoria" },
-              { value: 500,  suffix: "+",   label: "Vehículos vendidos" },
-              { value: 100,  suffix: "%",   label: "Financiación propia" },
+              { value: 40,  suffix: "",   label: "Años de trayectoria" },
+              { value: 500, suffix: "+",  label: "Vehículos vendidos"  },
+              { value: 100, suffix: "%",  label: "Financiación propia" },
             ].map(({ value, suffix, label }) => (
               <div key={label}>
                 <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 28, color: BLUE, lineHeight: 1 }}>
                   <AnimatedNumber value={value} suffix={suffix} />
                 </div>
-                <div style={{ fontFamily: BODY, fontSize: 10, color: "rgba(255,255,255,0.35)", marginTop: 4, letterSpacing: "0.04em" }}>
+                <div style={{ fontFamily: BODY, fontSize: 10, color: TEXT2, marginTop: 4, letterSpacing: "0.04em" }}>
                   {label}
                 </div>
               </div>
@@ -316,7 +329,7 @@ function HeroSection() {
       {/* Scroll indicator */}
       <motion.div
         animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 2 }}
-        style={{ position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)", color: "rgba(255,255,255,0.25)" }}
+        style={{ position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)", color: "rgba(13,20,37,0.2)" }}
       >
         <ChevronDown size={24} />
       </motion.div>
@@ -329,55 +342,19 @@ const BRANDS = ["RENAULT", "JEEP", "TOYOTA", "FIAT", "PEUGEOT", "FORD", "VOLKSWA
 
 function BrandStrip() {
   return (
-    <section style={{ background: DARKER, borderTop: `1px solid ${BLUE}18`, borderBottom: `1px solid ${BLUE}18`, padding: "18px 0", overflow: "hidden" }}>
+    <section style={{ background: BG2, borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}`, padding: "20px 0", overflow: "hidden", position: "relative" }}>
+      {/* Fade edges */}
+      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 100, background: `linear-gradient(to right, ${BG2}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
+      <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: 100, background: `linear-gradient(to left, ${BG2}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
       <div className="marquee-track">
         {[...BRANDS, ...BRANDS, ...BRANDS, ...BRANDS].map((b, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "center", gap: 40, paddingRight: 40 }}>
-            <span style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 13, letterSpacing: "0.22em", color: "rgba(255,255,255,0.2)", whiteSpace: "nowrap" }}>
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 48, paddingRight: 48 }}>
+            <span style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 12, letterSpacing: "0.26em", color: "rgba(13,20,37,0.28)", whiteSpace: "nowrap" }}>
               {b}
             </span>
-            <span style={{ width: 4, height: 4, borderRadius: "50%", background: `${BLUE}55`, flexShrink: 0 }} />
+            <span style={{ width: 4, height: 4, borderRadius: "50%", background: `${BLUE}60`, flexShrink: 0 }} />
           </div>
         ))}
-      </div>
-    </section>
-  )
-}
-
-// ── Stats ─────────────────────────────────────────────────────────────────────
-function StatsSection() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true })
-
-  const stats = [
-    { Icon: Award,       value: 40,  suffix: "",   top: "AÑOS DE",       bottom: "TRAYECTORIA"    },
-    { Icon: Car,         value: 1000,suffix: "+",  top: "VEHÍCULOS",     bottom: "VENDIDOS"       },
-    { Icon: TrendingUp,  value: 100, suffix: "%",  top: "FINANCIACIÓN",  bottom: "PROPIA"         },
-    { Icon: Star,        value: 4.9, suffix: "★",  top: "CALIFICACIÓN",  bottom: "PROMEDIO"       },
-  ]
-
-  return (
-    <section ref={ref} style={{ background: DARK, padding: "72px 0", borderBottom: `1px solid ${BLUE}18` }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
-        <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 2 }}>
-          {stats.map(({ Icon, value, suffix, top, bottom }, i) => (
-            <motion.div
-              key={bottom}
-              initial={{ opacity: 1, y: 0 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", padding: "36px 28px", textAlign: "center" }}
-            >
-              <div style={{ width: 48, height: 48, background: `${BLUE}18`, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px" }}>
-                <Icon size={22} style={{ color: BLUE }} />
-              </div>
-              <div style={{ fontFamily: DISPLAY, fontWeight: 600, fontSize: 32, lineHeight: 1, color: "#fff", marginBottom: 10, letterSpacing: "-0.01em" }}>
-                {inView ? <AnimatedNumber value={value} suffix={suffix} /> : `0${suffix}`}
-              </div>
-              <div style={{ fontFamily: BODY, fontWeight: 400, fontSize: 12, color: "rgba(255,255,255,0.42)", letterSpacing: "0.08em" }}>{top} {bottom}</div>
-            </motion.div>
-          ))}
-        </div>
       </div>
     </section>
   )
@@ -413,12 +390,16 @@ function FleetCard({ auto }: { auto: (typeof AUTOS)[0] }) {
         flex: "0 0 380px",
         height: 240,
         borderRadius: 12,
-        background: `linear-gradient(135deg, #080f1e 0%, #0b1626 100%)`,
-        border: `1px solid ${BLUE}18`,
+        background: BG,
+        border: `1px solid ${BORDER}`,
         position: "relative",
         overflow: "hidden",
         scrollSnapAlign: "start",
+        boxShadow: "0 2px 16px rgba(13,20,37,0.07)",
+        transition: "box-shadow 0.25s, transform 0.25s",
       }}
+      onMouseEnter={e => { e.currentTarget.style.boxShadow = "0 8px 32px rgba(13,20,37,0.13)"; e.currentTarget.style.transform = "translateY(-2px)" }}
+      onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 2px 16px rgba(13,20,37,0.07)"; e.currentTarget.style.transform = "translateY(0)" }}
     >
       {/* Accent line top */}
       <div style={{ position: "absolute", top: 0, left: 0, width: "50%", height: 2, background: `linear-gradient(90deg, ${accent}, transparent)` }} />
@@ -441,10 +422,10 @@ function FleetCard({ auto }: { auto: (typeof AUTOS)[0] }) {
         </div>
       )}
 
-      {/* Gradient: opaque left → transparent right */}
+      {/* Gradient: opaque white left → transparent right */}
       <div style={{
         position: "absolute", inset: 0,
-        background: `linear-gradient(to right, #080f1e 32%, rgba(8,15,30,0.82) 52%, rgba(8,15,30,0.1) 78%, transparent 100%)`,
+        background: `linear-gradient(to right, ${BG} 28%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0.1) 75%, transparent 100%)`,
         pointerEvents: "none",
       }} />
 
@@ -465,17 +446,17 @@ function FleetCard({ auto }: { auto: (typeof AUTOS)[0] }) {
         <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 10, color: accent, letterSpacing: "0.14em", marginBottom: 3 }}>
           {auto.marca}
         </div>
-        <div style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: 26, lineHeight: 1, marginBottom: 4 }}>
+        <div style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: 26, lineHeight: 1, marginBottom: 4, color: DARK }}>
           {auto.modelo}
         </div>
-        <div style={{ fontFamily: BODY, fontSize: 11, color: "rgba(255,255,255,0.38)", marginBottom: 14 }}>
+        <div style={{ fontFamily: BODY, fontSize: 11, color: TEXT2, marginBottom: 14 }}>
           {auto.version}
         </div>
 
         <div style={{ display: "flex", gap: 14, marginBottom: 18 }}>
-          <span style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 12, color: "rgba(255,255,255,0.6)" }}>{auto.anio}</span>
-          <span style={{ color: "rgba(255,255,255,0.18)" }}>·</span>
-          <span style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 12, color: "rgba(255,255,255,0.6)" }}>{auto.km === "0" ? "0 KM" : `${auto.km} km`}</span>
+          <span style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 12, color: "rgba(13,20,37,0.6)" }}>{auto.anio}</span>
+          <span style={{ color: "rgba(13,20,37,0.18)" }}>·</span>
+          <span style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 12, color: "rgba(13,20,37,0.6)" }}>{auto.km === "0" ? "0 KM" : `${auto.km} km`}</span>
         </div>
 
         <a
@@ -510,14 +491,14 @@ function FleetSection() {
   const fleet = AUTOS.slice(0, 10)
 
   return (
-    <section id="vehiculos" style={{ background: DARK, padding: "96px 0" }}>
+    <section id="vehiculos" style={{ background: BG2, padding: "96px 0" }}>
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
 
         {/* Header */}
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 24, marginBottom: 48 }}>
-          <div>
+          <div style={{ borderLeft: `5px solid ${BLUE}`, paddingLeft: 20 }}>
             <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 8 }}>STOCK DISPONIBLE</div>
-            <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(36px, 4.5vw, 58px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase" }}>
+            <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(36px, 4.5vw, 58px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase", color: DARK }}>
               VEHÍCULOS <span style={{ color: BLUE }}>DISPONIBLES</span>
             </h2>
           </div>
@@ -530,13 +511,13 @@ function FleetSection() {
                 onClick={() => scroll(dir)}
                 style={{
                   width: 44, height: 44, borderRadius: "50%",
-                  border: `1.5px solid ${BLUE}35`,
-                  background: "transparent", color: "rgba(255,255,255,0.5)",
+                  border: `1.5px solid ${BORDER}`,
+                  background: BG2, color: TEXT2,
                   cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
                   transition: "border-color 0.2s, color 0.2s, background 0.2s",
                 }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = BLUE; e.currentTarget.style.color = "#fff"; e.currentTarget.style.background = `${BLUE}18` }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = `${BLUE}35`; e.currentTarget.style.color = "rgba(255,255,255,0.5)"; e.currentTarget.style.background = "transparent" }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = BLUE; e.currentTarget.style.color = BLUE; e.currentTarget.style.background = `${BLUE}0a` }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = TEXT2; e.currentTarget.style.background = BG2 }}
               >
                 <ArrowRight size={16} style={{ transform: dir === "left" ? "rotate(180deg)" : "none" }} />
               </button>
@@ -563,8 +544,8 @@ function FleetSection() {
 
         {/* Scroll hint — mobile only */}
         <div className="flex md:hidden" style={{ alignItems: "center", gap: 6, marginTop: 14 }}>
-          <ArrowRight size={11} style={{ color: "rgba(255,255,255,0.22)" }} />
-          <span style={{ fontFamily: BODY, fontSize: 11, color: "rgba(255,255,255,0.22)" }}>Deslizá para ver más</span>
+          <ArrowRight size={11} style={{ color: TEXT2 }} />
+          <span style={{ fontFamily: BODY, fontSize: 11, color: TEXT2 }}>Deslizá para ver más</span>
         </div>
 
       </div>
@@ -578,17 +559,17 @@ function BentoSection() {
   const inView = useInView(ref, { once: true, margin: "-60px" })
 
   return (
-    <section ref={ref} id="financiacion" style={{ background: DARKER, padding: "96px 0", borderTop: `1px solid ${BLUE}15` }}>
+    <section ref={ref} id="financiacion" style={{ background: BG, padding: "96px 0", borderTop: `1px solid ${BORDER}` }}>
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
-        <div style={{ marginBottom: 48 }}>
+        <div style={{ borderLeft: `5px solid ${BLUE}`, paddingLeft: 20, marginBottom: 48 }}>
           <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 8 }}>HACEMOS TODO MÁS FÁCIL</div>
-          <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(36px, 4.5vw, 58px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase" }}>
+          <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(36px, 4.5vw, 58px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase", color: DARK }}>
             TU AUTO, <span style={{ color: BLUE }}>SIN VUELTAS</span>
           </h2>
         </div>
 
-        {/* Bento grid: big left + 2 right stacked */}
-        <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gridTemplateRows: "auto auto", gap: 16 }}>
+        {/* Bento grid: big left + right */}
+        <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 16 }}>
 
           {/* BIG: Tomamos tu usado */}
           <motion.div
@@ -596,25 +577,24 @@ function BentoSection() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
             style={{
-              gridRow: undefined,
-              background: `linear-gradient(135deg, ${BLUE}22 0%, ${BLUE}08 100%)`,
+              background: `linear-gradient(135deg, ${BLUE}16 0%, ${BLUE}08 100%)`,
               border: `1px solid ${BLUE}28`, borderRadius: 12,
               padding: "clamp(24px, 5vw, 48px) clamp(20px, 4vw, 40px)",
               display: "flex", flexDirection: "column", justifyContent: "space-between",
               minHeight: 340, position: "relative", overflow: "hidden",
             }}
           >
-            <div style={{ position: "absolute", bottom: -20, right: -20, opacity: 0.04 }}>
-              <RefreshCw size={220} />
+            <div style={{ position: "absolute", bottom: -20, right: -20, opacity: 0.07 }}>
+              <RefreshCw size={220} color={BLUE} />
             </div>
             <div>
-              <div style={{ width: 52, height: 52, background: `${BLUE}28`, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 28 }}>
+              <div style={{ width: 52, height: 52, background: `${BLUE}18`, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 28 }}>
                 <RefreshCw size={26} style={{ color: BLUE }} />
               </div>
-              <h3 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(28px, 3vw, 42px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase", marginBottom: 16 }}>
+              <h3 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(28px, 3vw, 42px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase", marginBottom: 16, color: DARK }}>
                 TOMAMOS<br />TU <span style={{ color: BLUE }}>USADO</span>
               </h3>
-              <p style={{ fontFamily: BODY, fontSize: 15, color: "rgba(255,255,255,0.52)", lineHeight: 1.7, maxWidth: 340 }}>
+              <p style={{ fontFamily: BODY, fontSize: 15, color: TEXT2, lineHeight: 1.7, maxWidth: 340 }}>
                 Tasamos tu vehículo de forma justa y transparente. Lo tomamos como parte de pago para que el salto al próximo sea más fácil y más barato.
               </p>
             </div>
@@ -628,27 +608,27 @@ function BentoSection() {
             </a>
           </motion.div>
 
-          {/* RIGHT TOP: Financiamos */}
+          {/* RIGHT: Financiamos */}
           <motion.div
             initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.1 }}
             style={{
-              background: `linear-gradient(135deg, ${RED}18 0%, ${RED}08 100%)`,
+              background: `linear-gradient(135deg, ${RED}12 0%, ${RED}07 100%)`,
               border: `1px solid ${RED}25`, borderRadius: 12,
               padding: "36px 32px", position: "relative", overflow: "hidden",
             }}
           >
-            <div style={{ position: "absolute", bottom: -10, right: -10, opacity: 0.04 }}>
-              <CreditCard size={140} />
+            <div style={{ position: "absolute", bottom: -10, right: -10, opacity: 0.07 }}>
+              <CreditCard size={140} color={RED} />
             </div>
-            <div style={{ width: 48, height: 48, background: `${RED}20`, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+            <div style={{ width: 48, height: 48, background: `${RED}14`, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
               <CreditCard size={24} style={{ color: RED }} />
             </div>
-            <h3 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: 28, lineHeight: 1.1, textTransform: "uppercase", marginBottom: 12 }}>
+            <h3 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: 28, lineHeight: 1.1, textTransform: "uppercase", marginBottom: 12, color: DARK }}>
               FINANCIAMOS
             </h3>
-            <p style={{ fontFamily: BODY, fontSize: 14, color: "rgba(255,255,255,0.5)", lineHeight: 1.65 }}>
+            <p style={{ fontFamily: BODY, fontSize: 14, color: TEXT2, lineHeight: 1.65 }}>
               Planes en pesos adaptados a tu situación. Sin trámites complicados, cuotas que se ajustan a vos.
             </p>
           </motion.div>
@@ -659,56 +639,11 @@ function BentoSection() {
   )
 }
 
-// ── Features ──────────────────────────────────────────────────────────────────
-const FEATURES = [
-  { Icon: Award,       title: "40 años de trayectoria", desc: "Cuatro décadas en Concepción del Uruguay nos respaldan. Conocemos el mercado local como nadie." },
-  { Icon: RefreshCw,   title: "Tomamos tu usado",        desc: "Tasamos y tomamos tu vehículo como parte de pago al mejor precio, sin complicaciones." },
-  { Icon: CreditCard,  title: "Financiamos",             desc: "Planes accesibles en pesos adaptados a tu situación. Cuotas cómodas, sin vueltas." },
-  { Icon: Shield,      title: "Calidad garantizada",     desc: "Todos los vehículos pasan revisión técnica completa antes de estar disponibles en stock." },
-]
-
-function FeaturesSection() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
-
-  return (
-    <section ref={ref} style={{ background: DARK, padding: "96px 0", borderTop: `1px solid ${BLUE}15` }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
-        <div style={{ marginBottom: 52 }}>
-          <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 8 }}>POR QUÉ ELEGIRNOS</div>
-          <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(36px, 4.5vw, 58px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase" }}>
-            LO QUE NOS <span style={{ color: BLUE }}>DISTINGUE</span>
-          </h2>
-        </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4" style={{ gap: 16 }}>
-          {FEATURES.map(({ Icon, title, desc }, i) => (
-            <motion.div
-              key={title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 8, padding: "32px 26px", transition: "border-color 0.3s" }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = `${BLUE}35`)}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)")}
-            >
-              <div style={{ width: 48, height: 48, background: `${BLUE}18`, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
-                <Icon size={22} style={{ color: BLUE }} />
-              </div>
-              <h3 style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 19, lineHeight: 1.2, marginBottom: 12 }}>{title}</h3>
-              <p style={{ fontFamily: BODY, fontSize: 14, color: "rgba(255,255,255,0.46)", lineHeight: 1.7 }}>{desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
 // ── Testimonials ──────────────────────────────────────────────────────────────
 const TESTIMONIALS = [
-  { name: "Gabriel S.",      car: "Google Maps",  text: "Buena gente, les hemos comprado autos y si los autos que venden son buenos, mejor aún la calidad de personas.", stars: 5 },
-  { name: "Fede",            car: "Google Maps",  text: "La atención es excelente y muy buena predisposición, gente que sabe lo que hace!", stars: 5 },
-  { name: "Luis Alberto D.", car: "Google Maps",  text: "Excelente atención, siempre dispuestos a brindar lo mejor con los clientes, que es lo más importante.", stars: 5 },
+  { name: "Gabriel S.",      car: "Google Maps", text: "Buena gente, les hemos comprado autos y si los autos que venden son buenos, mejor aún la calidad de personas.", stars: 5 },
+  { name: "Fede",            car: "Google Maps", text: "La atención es excelente y muy buena predisposición, gente que sabe lo que hace!", stars: 5 },
+  { name: "Luis Alberto D.", car: "Google Maps", text: "Excelente atención, siempre dispuestos a brindar lo mejor con los clientes, que es lo más importante.", stars: 5 },
 ]
 
 function TestimonialsSection() {
@@ -716,11 +651,13 @@ function TestimonialsSection() {
   const inView = useInView(ref, { once: true, margin: "-60px" })
 
   return (
-    <section ref={ref} style={{ background: DARKER, padding: "clamp(48px, 10vw, 96px) 0", borderTop: `1px solid ${BLUE}15` }}>
+    <section ref={ref} style={{ background: BG2, padding: "clamp(48px, 10vw, 96px) 0", borderTop: `1px solid ${BORDER}` }}>
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
-        <div style={{ textAlign: "center", marginBottom: 52 }}>
-          <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 8 }}>CLIENTES</div>
-          <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(36px, 4.5vw, 58px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase" }}>
+        {/* Header with decorative quote */}
+        <div style={{ textAlign: "center", marginBottom: 52, position: "relative" }}>
+          <div style={{ position: "absolute", top: -20, left: "50%", transform: "translateX(-50%)", fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(80px, 14vw, 160px)", color: `${BLUE}08`, lineHeight: 1, pointerEvents: "none", userSelect: "none" }}>&ldquo;</div>
+          <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 8, position: "relative" }}>CLIENTES</div>
+          <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(36px, 4.5vw, 58px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase", color: DARK, position: "relative" }}>
             LO QUE DICEN <span style={{ color: BLUE }}>NUESTROS CLIENTES</span>
           </h2>
         </div>
@@ -731,20 +668,20 @@ function TestimonialsSection() {
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10, padding: "32px 28px" }}
+              style={{ background: BG, border: `1px solid ${BORDER}`, borderRadius: 10, padding: "32px 28px", borderTop: `3px solid ${BLUE}`, position: "relative", overflow: "hidden" }}
             >
               {/* Stars */}
               <div style={{ display: "flex", gap: 4, marginBottom: 18 }}>
                 {Array.from({ length: stars }).map((_, j) => (
-                  <Star key={j} size={14} style={{ color: BLUE, fill: BLUE }} />
+                  <Star key={j} size={14} style={{ color: "#f59e0b", fill: "#f59e0b" }} />
                 ))}
               </div>
-              <p style={{ fontFamily: BODY, fontSize: 15, color: "rgba(255,255,255,0.62)", lineHeight: 1.7, marginBottom: 24, fontStyle: "italic" }}>
+              <p style={{ fontFamily: BODY, fontSize: 15, color: "rgba(13,20,37,0.65)", lineHeight: 1.7, marginBottom: 24, fontStyle: "italic" }}>
                 &ldquo;{text}&rdquo;
               </p>
-              <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)", paddingTop: 18 }}>
-                <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 15 }}>{name}</div>
-                <div style={{ fontFamily: BODY, fontSize: 12, color: "rgba(255,255,255,0.32)", marginTop: 2 }}>{car}</div>
+              <div style={{ borderTop: `1px solid ${BORDER}`, paddingTop: 18 }}>
+                <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 15, color: DARK }}>{name}</div>
+                <div style={{ fontFamily: BODY, fontSize: 12, color: TEXT2, marginTop: 2 }}>{car}</div>
               </div>
             </motion.div>
           ))}
@@ -760,32 +697,36 @@ function ContactSection() {
   const inView = useInView(ref, { once: true, margin: "-80px" })
 
   return (
-    <section ref={ref} id="contacto" style={{ background: DARK, padding: "clamp(48px, 10vw, 96px) 0", borderTop: `1px solid ${BLUE}15` }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
+    <section ref={ref} id="contacto" style={{ background: BG, padding: "clamp(48px, 10vw, 96px) 0", borderTop: `1px solid ${BORDER}`, position: "relative", overflow: "hidden" }}>
+      {/* Dot grid texture */}
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", backgroundImage: `radial-gradient(circle, ${DARK}0a 1.5px, transparent 1.5px)`, backgroundSize: "30px 30px" }} />
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", position: "relative" }}>
         <div className="grid lg:grid-cols-2" style={{ gap: "clamp(32px, 6vw, 80px)", alignItems: "center" }}>
 
           {/* LEFT */}
           <div>
-            <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 8 }}>CONTACTO</div>
-            <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(36px, 4.5vw, 58px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase", marginBottom: 40 }}>
-              VISITANOS O{" "}
-              <span style={{ color: RED }}>ESCRIBINOS</span>
-            </h2>
+            <div style={{ borderLeft: `5px solid ${RED}`, paddingLeft: 20, marginBottom: 40 }}>
+              <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 8 }}>CONTACTO</div>
+              <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(36px, 4.5vw, 58px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase", color: DARK }}>
+                VISITANOS O{" "}
+                <span style={{ color: RED }}>ESCRIBINOS</span>
+              </h2>
+            </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 22, marginBottom: 40 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 18, marginBottom: 40 }}>
               {[
-                { Icon: MapPin,  label: "Dirección", value: "Gral. Galarza 1712, Concepción del Uruguay, Entre Ríos" },
-                { Icon: Clock,   label: "Lun–Vie",   value: "9:00 a 17:00" },
-                { Icon: Clock,   label: "Sábados",   value: "8:30 a 12:00" },
-                { Icon: MessageCircle, label: "WhatsApp", value: "+54 9 3442 64-7442" },
+                { Icon: MapPin,        label: "Dirección", value: "Gral. Galarza 1712, Concepción del Uruguay, Entre Ríos" },
+                { Icon: Clock,         label: "Lun–Vie",   value: "9:00 a 17:00" },
+                { Icon: Clock,         label: "Sábados",   value: "8:30 a 12:00" },
+                { Icon: MessageCircle, label: "WhatsApp",  value: "+54 9 3442 64-7442" },
               ].map(({ Icon, label, value }) => (
                 <div key={label + value} style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-                  <div style={{ width: 40, height: 40, background: `${BLUE}18`, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <div style={{ width: 40, height: 40, background: `${BLUE}10`, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                     <Icon size={17} style={{ color: BLUE }} />
                   </div>
                   <div>
-                    <div style={{ fontFamily: BODY, fontSize: 10, color: "rgba(255,255,255,0.28)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 2 }}>{label}</div>
-                    <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 16 }}>{value}</div>
+                    <div style={{ fontFamily: BODY, fontSize: 10, color: TEXT2, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 2 }}>{label}</div>
+                    <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 16, color: DARK }}>{value}</div>
                   </div>
                 </div>
               ))}
@@ -801,12 +742,12 @@ function ContactSection() {
             </a>
           </div>
 
-          {/* RIGHT: Hours card — flyer-inspired */}
+          {/* RIGHT: Hours card */}
           <motion.div
             initial={{ opacity: 1 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}
-            style={{ background: `linear-gradient(135deg, ${BLUE}1c 0%, ${BLUE}0a 100%)`, border: `1px solid ${BLUE}28`, borderRadius: 12, padding: "clamp(24px, 5vw, 44px) clamp(20px, 4vw, 40px)" }}
+            style={{ background: `linear-gradient(135deg, ${BLUE}0e 0%, ${BLUE}06 100%)`, border: `1px solid ${BLUE}22`, borderRadius: 12, padding: "clamp(24px, 5vw, 44px) clamp(20px, 4vw, 40px)" }}
           >
-            <h3 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(22px, 5vw, 32px)", lineHeight: 1.1, letterSpacing: "-0.01em", textTransform: "uppercase", marginBottom: 36 }}>
+            <h3 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(22px, 5vw, 32px)", lineHeight: 1.1, letterSpacing: "-0.01em", textTransform: "uppercase", marginBottom: 36, color: DARK }}>
               HORARIOS DE<br />ATENCIÓN
             </h3>
             {[
@@ -814,9 +755,9 @@ function ContactSection() {
               { day: "SÁBADOS",   open: "08:30", close: "12:00" },
             ].map(({ day, open, close }) => (
               <div key={day} style={{ marginBottom: 30 }}>
-                <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: "rgba(255,255,255,0.42)", letterSpacing: "0.14em", marginBottom: 12 }}>{day}</div>
+                <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: TEXT2, letterSpacing: "0.14em", marginBottom: 12 }}>{day}</div>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <span style={{ background: "rgba(255,255,255,0.08)", fontFamily: DISPLAY, fontWeight: 800, fontSize: 32, padding: "8px 20px", clipPath: "polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%)", color: "rgba(255,255,255,0.65)", lineHeight: 1, display: "inline-block" }}>
+                  <span style={{ background: BG2, fontFamily: DISPLAY, fontWeight: 800, fontSize: 32, padding: "8px 20px", clipPath: "polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%)", color: "rgba(13,20,37,0.6)", lineHeight: 1, display: "inline-block" }}>
                     {open}
                   </span>
                   <div style={{ width: 22, height: 2.5, background: RED, transform: "rotate(-20deg)", flexShrink: 0 }} />
@@ -836,15 +777,15 @@ function ContactSection() {
 // ── Telepase Banner ───────────────────────────────────────────────────────────
 function TelepaseBanner() {
   return (
-    <div style={{ background: `linear-gradient(90deg, ${BLUE}22 0%, ${BLUE}0a 100%)`, borderTop: `1px solid ${BLUE}25`, borderBottom: `1px solid ${BLUE}25` }}>
+    <div style={{ background: `${BLUE}08`, borderTop: `1px solid ${BLUE}18`, borderBottom: `1px solid ${BLUE}18` }}>
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "20px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <div style={{ width: 40, height: 40, background: `${BLUE}28`, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <div style={{ width: 40, height: 40, background: `${BLUE}14`, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             <Zap size={18} style={{ color: BLUE }} />
           </div>
           <div>
-            <div style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 15, letterSpacing: "0.02em" }}>Gestionamos tu Telepase</div>
-            <div style={{ fontFamily: BODY, fontSize: 13, color: "rgba(255,255,255,0.48)", marginTop: 2 }}>Nos encargamos del trámite para que viajes sin parar en los peajes.</div>
+            <div style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 15, letterSpacing: "0.02em", color: DARK }}>Gestionamos tu Telepase</div>
+            <div style={{ fontFamily: BODY, fontSize: 13, color: TEXT2, marginTop: 2 }}>Nos encargamos del trámite para que viajes sin parar en los peajes.</div>
           </div>
         </div>
         <a
@@ -876,7 +817,7 @@ function GestoriaSection() {
   ]
 
   return (
-    <section id="gestoria" ref={ref} style={{ background: DARKER, padding: "clamp(48px, 10vw, 96px) 0", borderTop: `1px solid ${BLUE}15` }}>
+    <section id="gestoria" ref={ref} style={{ background: BG2, padding: "clamp(48px, 10vw, 96px) 0", borderTop: `1px solid ${BORDER}` }}>
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
         <div className="grid lg:grid-cols-2" style={{ gap: "clamp(32px, 6vw, 80px)", alignItems: "center" }}>
 
@@ -884,11 +825,13 @@ function GestoriaSection() {
           <motion.div
             initial={{ opacity: 1 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}
           >
-            <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 8 }}>SERVICIOS ADICIONALES</div>
-            <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(32px, 4.5vw, 58px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase", marginBottom: 20 }}>
-              GESTORÍA<br /><span style={{ color: BLUE }}>AUTOMOTOR</span>
-            </h2>
-            <p style={{ fontFamily: BODY, fontSize: 16, color: "rgba(255,255,255,0.5)", lineHeight: 1.7, marginBottom: 36, maxWidth: 440 }}>
+            <div style={{ borderLeft: `5px solid ${BLUE}`, paddingLeft: 20, marginBottom: 20 }}>
+              <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 8 }}>SERVICIOS ADICIONALES</div>
+              <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(32px, 4.5vw, 58px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase", color: DARK }}>
+                GESTORÍA<br /><span style={{ color: BLUE }}>AUTOMOTOR</span>
+              </h2>
+            </div>
+            <p style={{ fontFamily: BODY, fontSize: 16, color: TEXT2, lineHeight: 1.7, marginBottom: 36, maxWidth: 440 }}>
               Además de la compra y venta de vehículos, te ayudamos con todos los trámites del automotor. Sin colas, sin vueltas — nosotros nos encargamos del papeleo.
             </p>
             <a
@@ -904,13 +847,13 @@ function GestoriaSection() {
           {/* RIGHT — servicios list */}
           <motion.div
             initial={{ opacity: 1 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.1 }}
-            style={{ background: `linear-gradient(135deg, ${BLUE}14 0%, ${BLUE}06 100%)`, border: `1px solid ${BLUE}22`, borderRadius: 12, padding: "clamp(24px, 5vw, 40px)" }}
+            style={{ background: BG, border: `1px solid ${BORDER}`, borderRadius: 12, padding: "clamp(24px, 5vw, 40px)" }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 28 }}>
-              <div style={{ width: 48, height: 48, background: `${BLUE}22`, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <div style={{ width: 48, height: 48, background: `${BLUE}10`, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                 <FileText size={22} style={{ color: BLUE }} />
               </div>
-              <div style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 18 }}>Trámites que realizamos</div>
+              <div style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 18, color: DARK }}>Trámites que realizamos</div>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {servicios.map((s, i) => (
@@ -920,7 +863,7 @@ function GestoriaSection() {
                   style={{ display: "flex", alignItems: "center", gap: 12 }}
                 >
                   <CheckCircle size={15} style={{ color: BLUE, flexShrink: 0 }} />
-                  <span style={{ fontFamily: BODY, fontSize: 15, color: "rgba(255,255,255,0.75)" }}>{s}</span>
+                  <span style={{ fontFamily: BODY, fontSize: 15, color: "rgba(13,20,37,0.72)" }}>{s}</span>
                 </motion.div>
               ))}
             </div>
@@ -935,16 +878,18 @@ function GestoriaSection() {
 // ── Footer ────────────────────────────────────────────────────────────────────
 function Footer() {
   return (
-    <footer style={{ background: DARKER, borderTop: `1px solid rgba(255,255,255,0.05)` }}>
+    <footer style={{ background: BG2, borderTop: "none" }}>
+      {/* Color stripe top */}
+      <div style={{ height: 4, background: `linear-gradient(90deg, ${BLUE}, ${RED})` }} />
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "64px 24px 0" }}>
-        <div className="grid md:grid-cols-4" style={{ gap: 48, paddingBottom: 52, borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="grid md:grid-cols-4" style={{ gap: 48, paddingBottom: 52, borderBottom: `1px solid ${BORDER}` }}>
 
           {/* Brand */}
           <div>
             <div style={{ marginBottom: 16 }}>
               <Image src="/logo.webp" alt="Chita Automotores" width={120} height={48} style={{ objectFit: "contain" }} />
             </div>
-            <p style={{ fontFamily: BODY, fontSize: 13, color: "rgba(255,255,255,0.38)", lineHeight: 1.7 }}>
+            <p style={{ fontFamily: BODY, fontSize: 13, color: TEXT2, lineHeight: 1.7 }}>
               Concesionaria de autos 0km y usados en Concepción del Uruguay, Entre Ríos. Desde 1984.
             </p>
           </div>
@@ -954,7 +899,7 @@ function Footer() {
             <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 20 }}>NAVEGACIÓN</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {["Inicio", "Vehículos", "Financiación", "Contacto"].map(l => (
-                <a key={l} href={`#${l.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")}`} style={{ fontFamily: BODY, fontSize: 14, color: "rgba(255,255,255,0.42)", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={e => (e.currentTarget.style.color = "#fff")} onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.42)")}>
+                <a key={l} href={`#${l.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")}`} style={{ fontFamily: BODY, fontSize: 14, color: TEXT2, textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={e => (e.currentTarget.style.color = DARK)} onMouseLeave={e => (e.currentTarget.style.color = TEXT2)}>
                   {l}
                 </a>
               ))}
@@ -966,7 +911,7 @@ function Footer() {
             <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 20 }}>VEHÍCULOS</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {["Autos 0km", "Autos Usados", "Tomá mi usado", "Financiación"].map(l => (
-                <a key={l} href="#vehiculos" style={{ fontFamily: BODY, fontSize: 14, color: "rgba(255,255,255,0.42)", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={e => (e.currentTarget.style.color = "#fff")} onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.42)")}>
+                <a key={l} href="#vehiculos" style={{ fontFamily: BODY, fontSize: 14, color: TEXT2, textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={e => (e.currentTarget.style.color = DARK)} onMouseLeave={e => (e.currentTarget.style.color = TEXT2)}>
                   {l}
                 </a>
               ))}
@@ -979,11 +924,11 @@ function Footer() {
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
                 <MapPin size={14} style={{ color: BLUE, marginTop: 2, flexShrink: 0 }} />
-                <span style={{ fontFamily: BODY, fontSize: 13, color: "rgba(255,255,255,0.42)", lineHeight: 1.5 }}>Gral. Galarza 1712<br />Concepción del Uruguay</span>
+                <span style={{ fontFamily: BODY, fontSize: 13, color: TEXT2, lineHeight: 1.5 }}>Gral. Galarza 1712<br />Concepción del Uruguay</span>
               </div>
               <div style={{ display: "flex", gap: 10 }}>
                 <Clock size={14} style={{ color: BLUE, marginTop: 2, flexShrink: 0 }} />
-                <span style={{ fontFamily: BODY, fontSize: 13, color: "rgba(255,255,255,0.42)", lineHeight: 1.5 }}>Lun–Vie 9–17 · Sáb 8:30–12</span>
+                <span style={{ fontFamily: BODY, fontSize: 13, color: TEXT2, lineHeight: 1.5 }}>Lun–Vie 9–17 · Sáb 8:30–12</span>
               </div>
               <a href="https://wa.me/5493442647442" target="_blank" rel="noopener noreferrer" style={{ display: "flex", gap: 10, textDecoration: "none" }}>
                 <MessageCircle size={14} style={{ color: RED, marginTop: 2, flexShrink: 0 }} />
@@ -995,10 +940,10 @@ function Footer() {
 
         {/* Bottom bar */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 0", flexWrap: "wrap", gap: 12 }}>
-          <span style={{ fontFamily: BODY, fontSize: 12, color: "rgba(255,255,255,0.22)" }}>
+          <span style={{ fontFamily: BODY, fontSize: 12, color: TEXT2 }}>
             © {new Date().getFullYear()} Chita Automotores · Todos los derechos reservados
           </span>
-          <span style={{ fontFamily: BODY, fontSize: 12, color: "rgba(255,255,255,0.18)" }}>
+          <span style={{ fontFamily: BODY, fontSize: 12, color: TEXT2 }}>
             Concepción del Uruguay, Entre Ríos, Argentina
           </span>
         </div>
