@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence, useInView } from "framer-motion"
 import Image from "next/image"
 import {
-  MapPin, Clock, Car, CheckCircle, X, MessageCircle,
+  MapPin, Clock, CheckCircle, X, MessageCircle,
   Star, ArrowRight, RefreshCw, CreditCard,
   ChevronDown, Menu, FileText, Zap,
 } from "lucide-react"
@@ -18,9 +18,11 @@ const BG      = "#ffffff"
 const BG2     = "#f5f6fa"
 const TEXT2   = "rgba(13,20,37,0.52)"
 const BORDER  = "rgba(13,20,37,0.08)"
+const WA      = "#128C7E"
 
 // URL-encodes filenames from /public/imagenes autos/
 const p = (f: string) => `/imagenes%20autos/${f.replace(/ /g, "%20")}`
+const p2 = (f: string) => `/imagenes%20autos%202.0/${f.replace(/ /g, "%20")}`
 
 // ── Animated number counter ──────────────────────────────────────────────────
 function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string }) {
@@ -41,7 +43,7 @@ function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string
     requestAnimationFrame(tick)
   }, [inView, value])
 
-  return <span ref={ref}>{display}{suffix}</span>
+  return <span ref={ref}>{display.toLocaleString("es-AR")}{suffix}</span>
 }
 
 // ── Scroll progress bar ──────────────────────────────────────────────────────
@@ -125,7 +127,7 @@ function TopBar() {
             <a
               href="https://wa.me/5493442647442"
               target="_blank" rel="noopener noreferrer"
-              style={{ marginTop: 12, background: RED, color: "#fff", fontFamily: DISPLAY, fontWeight: 700, fontSize: 16, letterSpacing: "0.08em", padding: "14px 32px", borderRadius: 4, textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}
+              style={{ marginTop: 12, background: WA, color: "#fff", fontFamily: DISPLAY, fontWeight: 700, fontSize: 16, letterSpacing: "0.08em", padding: "14px 32px", borderRadius: 4, textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}
             >
               <MessageCircle size={18} /> WHATSAPP
             </a>
@@ -191,7 +193,7 @@ function TopBar() {
               href="https://wa.me/5493442647442"
               target="_blank" rel="noopener noreferrer"
               className="shimmer-btn hidden md:flex"
-              style={{ alignItems: "center", gap: 8, background: RED, color: "#fff", fontFamily: DISPLAY, fontWeight: 700, fontSize: 13, letterSpacing: "0.07em", padding: "8px 20px", borderRadius: 4, textDecoration: "none", transition: "opacity 0.2s" }}
+              style={{ alignItems: "center", gap: 8, background: WA, color: "#fff", fontFamily: DISPLAY, fontWeight: 700, fontSize: 13, letterSpacing: "0.07em", padding: "8px 20px", borderRadius: 4, textDecoration: "none", transition: "opacity 0.2s" }}
               onMouseEnter={e => (e.currentTarget.style.opacity = "0.9")}
               onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
             >
@@ -295,8 +297,8 @@ function HeroSection() {
             <a
               href="https://wa.me/5493442647442"
               target="_blank" rel="noopener noreferrer"
-              style={{ display: "inline-flex", alignItems: "center", gap: 10, border: `1.5px solid ${RED}`, color: RED, fontFamily: DISPLAY, fontWeight: 700, fontSize: 14, letterSpacing: "0.08em", padding: "13px 28px", clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%)", textDecoration: "none", transition: "background 0.2s, color 0.2s" }}
-              onMouseEnter={e => { e.currentTarget.style.background = RED; e.currentTarget.style.color = "#fff" }}
+              style={{ display: "inline-flex", alignItems: "center", gap: 10, border: `1.5px solid ${WA}`, color: WA, fontFamily: DISPLAY, fontWeight: 700, fontSize: 14, letterSpacing: "0.08em", padding: "13px 28px", clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%)", textDecoration: "none", transition: "background 0.2s, color 0.2s" }}
+              onMouseEnter={e => { e.currentTarget.style.background = WA; e.currentTarget.style.color = "#fff" }}
               onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = RED }}
             >
               <MessageCircle size={15} /> WHATSAPP
@@ -309,9 +311,9 @@ function HeroSection() {
             style={{ display: "flex", gap: 32, paddingTop: 22, borderTop: `1px solid ${BORDER}` }}
           >
             {[
-              { value: 40,  suffix: "",   label: "Años de trayectoria" },
-              { value: 500, suffix: "+",  label: "Vehículos vendidos"  },
-              { value: 100, suffix: "%",  label: "Financiación propia" },
+              { value: 40,   suffix: "",  label: "Años de trayectoria" },
+              { value: 5000, suffix: "+", label: "Vehículos vendidos"  },
+              { value: 20,   suffix: "+", label: "Marcas disponibles"   },
             ].map(({ value, suffix, label }) => (
               <div key={label}>
                 <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 28, color: BLUE, lineHeight: 1 }}>
@@ -338,7 +340,7 @@ function HeroSection() {
 }
 
 // ── Brand strip ───────────────────────────────────────────────────────────────
-const BRANDS = ["RENAULT", "JEEP", "TOYOTA", "FIAT", "PEUGEOT", "FORD", "VOLKSWAGEN", "CHEVROLET", "HONDA", "NISSAN"]
+const BRANDS = ["RENAULT", "TOYOTA", "FIAT", "PEUGEOT", "FORD", "VOLKSWAGEN", "CHEVROLET", "HONDA", "BAIC", "JAC", "CHERY"]
 
 function BrandStrip() {
   return (
@@ -362,192 +364,129 @@ function BrandStrip() {
 
 // ── Autos ─────────────────────────────────────────────────────────────────────
 const AUTOS = [
-  // ── 0 KM ──
-  { marca: "CHEVROLET",  modelo: "Captiva",      version: "PHEV Plug-in Hybrid",  anio: "2025", km: "0",       tipo: "0KM"   as const, imagen: p("chevrolet captiva phev 0 km.webp")                              },
-  { marca: "JAC",        modelo: "JS2",          version: "Luxury",               anio: "2025", km: "0",       tipo: "0KM"   as const, imagen: p("jac js2 luxury o km.webp")                                     },
-  { marca: "TOYOTA",     modelo: "Yaris Cross",  version: "XLS",                  anio: "2025", km: "0",       tipo: "0KM"   as const, imagen: p("toyota yaris cross 0 km.webp")                                  },
-  // ── USADOS ──
-  { marca: "JEEP",       modelo: "Renegade",     version: "Sport AT",             anio: "2025", km: "21.000",  tipo: "USADO" as const, imagen: p("jeep renegade 2025 21 mil km.webp")                             },
-  { marca: "TOYOTA",     modelo: "Corolla",      version: "XEi CVT",              anio: "2023", km: "21.000",  tipo: "USADO" as const, imagen: p("toyota corolla xei cvt 2023 21mil km.webp")                     },
-  { marca: "RENAULT",    modelo: "Kangoo",       version: "Furgón",               anio: "2023", km: "57.000",  tipo: "USADO" as const, imagen: p("renault kangoo 2023 57 mil km.webp")                            },
-  { marca: "RENAULT",    modelo: "Captur",       version: "Intens CVT",           anio: "2020", km: "72.000",  tipo: "USADO" as const, imagen: p("renault captur intens 2020 72 mil km.webp")                     },
-  { marca: "VOLKSWAGEN", modelo: "Nivus",        version: "Comfortline",          anio: "2020", km: "103.000", tipo: "USADO" as const, imagen: p("volkswagen navius 2020 103 mil km.webp")                        },
-  { marca: "FIAT",       modelo: "Palio",        version: "Attractive",           anio: "2018", km: "87.000",  tipo: "USADO" as const, imagen: p("fiat palio attractive 2018 87 mil km.webp")                     },
-  { marca: "PEUGEOT",    modelo: "408",          version: "Allure 2.0",           anio: "2016", km: "87.000",  tipo: "USADO" as const, imagen: p("peugeot 408 aliure 2016 87mil km.webp")                         },
-  { marca: "CHEVROLET",  modelo: "Onix",         version: "LTZ",                  anio: "2016", km: "103.000", tipo: "USADO" as const, imagen: p("cherolet onix ltz 2016 103 mil km.webp")                        },
-  { marca: "NISSAN",     modelo: "Frontier",     version: "Platinum 4x4",         anio: "2022", km: "174.000", tipo: "USADO" as const, imagen: p("nissan frontier platinum 4x4 2022 174 mil km.webp")             },
-  { marca: "VOLKSWAGEN", modelo: "Vento",        version: "Tech Comfortline",     anio: "2017", km: "174.000", tipo: "USADO" as const, imagen: p("volkswagen vento tech comfotline 2017 174 mil km.webp")         },
+  { marca: "BAIC",      modelo: "X55 Plus",    version: "SUV Automático",       anio: "2025", tipo: "0KM" as const, imagen: p2("BAIC x55 plus okm.png"),        descripcion: "SUV tecnológico con pantalla táctil 10\", cámara 360° y financiación propia." },
+  { marca: "BAIC",      modelo: "BJ30",        version: "SUV 4×2",              anio: "2025", tipo: "0KM" as const, imagen: p2("BAIC bj30 0km.png"),           descripcion: "SUV robusto 4×2 con motor turbo. Todo el equipamiento para el campo y la ciudad." },
+  { marca: "CHEVROLET", modelo: "Montana",     version: "Premium MT",           anio: "2025", tipo: "0KM" as const, imagen: p2("chevrolet montana 0km.png"),    descripcion: "La pick-up compacta más versátil de Argentina. Lista para la ciudad, el campo o la aventura." },
+  { marca: "CHEVROLET", modelo: "Tracker",     version: "LTZ Turbo AT",         anio: "2025", tipo: "0KM" as const, imagen: p2("chevrolet tracker 0km.png"),    descripcion: "SUV urbano con motor turbo 1.2, pantalla 8\" y conectividad WiFi a bordo." },
+  { marca: "TOYOTA",    modelo: "Yaris Cross", version: "XLS CVT",              anio: "2025", tipo: "0KM" as const, imagen: p2("toyota yaris cross 0km.png"),   descripcion: "Crossover japonés: eficiente, confiable y seguro para la ciudad y la ruta." },
 ]
 
-function FleetCard({ auto }: { auto: (typeof AUTOS)[0] }) {
-  const [imgError, setImgError] = useState(false)
-  const accent = auto.tipo === "0KM" ? BLUE : RED
-
-  return (
-    <div
-      className="fleet-card"
-      style={{
-        flex: "0 0 380px",
-        height: 240,
-        borderRadius: 12,
-        background: BG,
-        border: `1px solid ${BORDER}`,
-        position: "relative",
-        overflow: "hidden",
-        scrollSnapAlign: "start",
-        boxShadow: "0 2px 16px rgba(13,20,37,0.07)",
-        transition: "box-shadow 0.25s, transform 0.25s",
-      }}
-      onMouseEnter={e => { e.currentTarget.style.boxShadow = "0 8px 32px rgba(13,20,37,0.13)"; e.currentTarget.style.transform = "translateY(-2px)" }}
-      onMouseLeave={e => { e.currentTarget.style.boxShadow = "0 2px 16px rgba(13,20,37,0.07)"; e.currentTarget.style.transform = "translateY(0)" }}
-    >
-      {/* Accent line top */}
-      <div style={{ position: "absolute", top: 0, left: 0, width: "50%", height: 2, background: `linear-gradient(90deg, ${accent}, transparent)` }} />
-
-      {/* Car image — right side, uses contain to respect transparency */}
-      {!imgError ? (
-        <div style={{ position: "absolute", right: "-4%", top: 0, bottom: 0, width: "64%", pointerEvents: "none" }}>
-          <Image
-            src={auto.imagen}
-            alt={`${auto.marca} ${auto.modelo}`}
-            fill
-            loading="lazy"
-            style={{ objectFit: "contain", objectPosition: "center right" }}
-            onError={() => setImgError(true)}
-          />
-        </div>
-      ) : (
-        <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "60%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <Car size={72} style={{ color: `${BLUE}20` }} />
-        </div>
-      )}
-
-      {/* Gradient: opaque white left → transparent right */}
-      <div style={{
-        position: "absolute", inset: 0,
-        background: `linear-gradient(to right, ${BG} 28%, rgba(255,255,255,0.85) 50%, rgba(255,255,255,0.1) 75%, transparent 100%)`,
-        pointerEvents: "none",
-      }} />
-
-      {/* Info — left column */}
-      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "52%", display: "flex", flexDirection: "column", justifyContent: "center", padding: "20px 24px" }}>
-        {/* Tipo badge */}
-        <span style={{
-          alignSelf: "flex-start",
-          background: accent, color: "#fff",
-          fontFamily: DISPLAY, fontWeight: 700, fontSize: 9, letterSpacing: "0.14em",
-          padding: "3px 10px",
-          clipPath: "polygon(0 0, calc(100% - 5px) 0, 100% 100%, 5px 100%)",
-          marginBottom: 12,
-        }}>
-          {auto.tipo}
-        </span>
-
-        <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 10, color: accent, letterSpacing: "0.14em", marginBottom: 3 }}>
-          {auto.marca}
-        </div>
-        <div style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: 26, lineHeight: 1, marginBottom: 4, color: DARK }}>
-          {auto.modelo}
-        </div>
-        <div style={{ fontFamily: BODY, fontSize: 11, color: TEXT2, marginBottom: 14 }}>
-          {auto.version}
-        </div>
-
-        <div style={{ display: "flex", gap: 14, marginBottom: 18 }}>
-          <span style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 12, color: "rgba(13,20,37,0.6)" }}>{auto.anio}</span>
-          <span style={{ color: "rgba(13,20,37,0.18)" }}>·</span>
-          <span style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 12, color: "rgba(13,20,37,0.6)" }}>{auto.km === "0" ? "0 KM" : `${auto.km} km`}</span>
-        </div>
-
-        <a
-          href={`https://wa.me/5493442647442?text=Hola! Me interesa el ${auto.marca} ${auto.modelo} ${auto.anio}`}
-          target="_blank" rel="noopener noreferrer"
-          style={{
-            alignSelf: "flex-start",
-            display: "inline-flex", alignItems: "center", gap: 6,
-            background: accent, color: "#fff",
-            fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, letterSpacing: "0.08em",
-            padding: "8px 16px", borderRadius: 4, textDecoration: "none",
-          }}
-        >
-          <MessageCircle size={11} /> CONSULTAR
-        </a>
-      </div>
-    </div>
-  )
-}
-
 function FleetSection() {
-  const trackRef = useRef<HTMLDivElement>(null)
+  const [current, setCurrent] = useState(0)
+  const [dir, setDir] = useState<1 | -1>(1)
 
-  const scroll = (dir: "left" | "right") => {
-    const track = trackRef.current
-    if (!track) return
-    const card = track.querySelector(".fleet-card") as HTMLElement
-    const amount = card ? card.offsetWidth + 16 : 396
-    track.scrollBy({ left: dir === "right" ? amount : -amount, behavior: "smooth" })
+  const go = (idx: number) => {
+    setDir(idx > current ? 1 : -1)
+    setCurrent(idx)
   }
+  const prev = () => go((current - 1 + AUTOS.length) % AUTOS.length)
+  const next = () => go((current + 1) % AUTOS.length)
 
-  const fleet = AUTOS.slice(0, 10)
+  const auto = AUTOS[current]
 
   return (
-    <section id="vehiculos" style={{ background: BG2, padding: "96px 0" }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
+    <section id="vehiculos" style={{ background: BG, position: "relative", overflow: "hidden", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
 
-        {/* Header */}
-        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 24, marginBottom: 48 }}>
-          <div style={{ borderLeft: `5px solid ${BLUE}`, paddingLeft: 20 }}>
-            <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 8 }}>STOCK DISPONIBLE</div>
-            <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(36px, 4.5vw, 58px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase", color: DARK }}>
-              VEHÍCULOS <span style={{ color: BLUE }}>DISPONIBLES</span>
-            </h2>
-          </div>
+      {/* Dot grid texture */}
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", backgroundImage: `radial-gradient(circle, ${DARK}10 1.5px, transparent 1.5px)`, backgroundSize: "30px 30px" }} />
 
-          {/* Navigation arrows */}
-          <div className="hidden md:flex" style={{ gap: 8 }}>
-            {(["left", "right"] as const).map(dir => (
-              <button
-                key={dir}
-                onClick={() => scroll(dir)}
-                style={{
-                  width: 44, height: 44, borderRadius: "50%",
-                  border: `1.5px solid ${BORDER}`,
-                  background: BG2, color: TEXT2,
-                  cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
-                  transition: "border-color 0.2s, color 0.2s, background 0.2s",
-                }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = BLUE; e.currentTarget.style.color = BLUE; e.currentTarget.style.background = `${BLUE}0a` }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = TEXT2; e.currentTarget.style.background = BG2 }}
-              >
-                <ArrowRight size={16} style={{ transform: dir === "left" ? "rotate(180deg)" : "none" }} />
-              </button>
-            ))}
-          </div>
+      {/* Top label bar */}
+      <div style={{ position: "relative", zIndex: 2, padding: "28px 40px 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ width: 5, height: 22, background: BLUE, borderRadius: 2 }} />
+          <span style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.16em" }}>
+            STOCK DISPONIBLE · 0 KM
+          </span>
         </div>
+        <span style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 13, color: TEXT2 }}>
+          {String(current + 1).padStart(2, "0")} / {String(AUTOS.length).padStart(2, "0")}
+        </span>
+      </div>
 
-        {/* Scrollable track */}
-        <div
-          ref={trackRef}
-          className="fleet-track"
-          style={{
-            display: "flex",
-            overflowX: "auto",
-            gap: 16,
-            scrollSnapType: "x mandatory",
-            paddingBottom: 4,
-          }}
+      {/* Slide area */}
+      <div style={{ flex: 1, position: "relative", zIndex: 2, minHeight: 500 }}>
+        <AnimatePresence mode="wait" custom={dir}>
+          <motion.div
+            key={current}
+            custom={dir}
+            variants={{
+              enter: (d: number) => ({ x: `${d * 8}%`, opacity: 0 }),
+              center: { x: "0%", opacity: 1 },
+              exit: (d: number) => ({ x: `${-d * 8}%`, opacity: 0 }),
+            }}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.45, ease: [0.25, 0.1, 0.25, 1] }}
+            style={{ position: "absolute", inset: 0 }}
+          >
+            <div className="fleet-slide" style={{ height: "100%" }}>
+              {/* Text — left on desktop, bottom on mobile */}
+              <div className="fleet-slide-text">
+                <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: RED, letterSpacing: "0.2em", marginBottom: 8 }}>
+                  {auto.marca}
+                </div>
+                <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(52px, 8vw, 110px)", lineHeight: 0.88, letterSpacing: "-0.03em", textTransform: "uppercase", color: DARK, marginBottom: 24 }}>
+                  {auto.modelo}
+                </h2>
+                <div style={{ fontFamily: BODY, fontSize: "clamp(14px, 1.4vw, 16px)", color: TEXT2, maxWidth: 380, lineHeight: 1.7, marginBottom: 36 }}>
+                  {auto.descripcion}
+                </div>
+                <a
+                  href={`https://wa.me/5493442647442?text=Hola! Me interesa el ${auto.marca} ${auto.modelo} ${auto.anio}`}
+                  target="_blank" rel="noopener noreferrer"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 8, background: WA, color: "#fff", fontFamily: DISPLAY, fontWeight: 700, fontSize: 13, letterSpacing: "0.1em", padding: "14px 28px", borderRadius: 4, textDecoration: "none", transition: "background 0.2s" }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "#0a7a6c")}
+                  onMouseLeave={e => (e.currentTarget.style.background = WA)}
+                >
+                  <MessageCircle size={15} /> CONSULTAR
+                </a>
+              </div>
+
+              {/* Car image — right on desktop, top on mobile */}
+              <div className="fleet-car-img">
+                <Image
+                  src={auto.imagen}
+                  alt={`${auto.marca} ${auto.modelo}`}
+                  fill
+                  style={{ objectFit: "contain", filter: "drop-shadow(0px 24px 48px rgba(13,20,37,0.20)) drop-shadow(0px 6px 14px rgba(13,20,37,0.10))" }}
+                  priority={current === 0}
+                />
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Bottom navigation */}
+      <div style={{ position: "absolute", bottom: 28, left: 0, right: 0, zIndex: 3, display: "flex", alignItems: "center", justifyContent: "center", gap: 24 }}>
+        <button
+          onClick={prev}
+          style={{ width: 44, height: 44, borderRadius: "50%", border: `1.5px solid ${BORDER}`, background: BG, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: TEXT2, transition: "all 0.2s" }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = DARK; e.currentTarget.style.color = DARK }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = TEXT2 }}
         >
-          {fleet.map(auto => (
-            <FleetCard key={`${auto.marca}-${auto.modelo}-${auto.anio}`} auto={auto} />
+          <ArrowRight size={16} style={{ transform: "rotate(180deg)" }} />
+        </button>
+
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          {AUTOS.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => go(i)}
+              style={{ width: i === current ? 28 : 8, height: 8, borderRadius: 4, border: "none", background: i === current ? BLUE : `${DARK}20`, cursor: "pointer", transition: "all 0.3s", padding: 0 }}
+            />
           ))}
         </div>
 
-        {/* Scroll hint — mobile only */}
-        <div className="flex md:hidden" style={{ alignItems: "center", gap: 6, marginTop: 14 }}>
-          <ArrowRight size={11} style={{ color: TEXT2 }} />
-          <span style={{ fontFamily: BODY, fontSize: 11, color: TEXT2 }}>Deslizá para ver más</span>
-        </div>
-
+        <button
+          onClick={next}
+          style={{ width: 44, height: 44, borderRadius: "50%", border: `1.5px solid ${BORDER}`, background: BG, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: TEXT2, transition: "all 0.2s" }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = DARK; e.currentTarget.style.color = DARK }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = TEXT2 }}
+        >
+          <ArrowRight size={16} />
+        </button>
       </div>
     </section>
   )
@@ -568,67 +507,46 @@ function BentoSection() {
           </h2>
         </div>
 
-        {/* Bento grid: big left + right */}
-        <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 16 }}>
+        <div>
 
-          {/* BIG: Tomamos tu usado */}
+          {/* Fila 1 — Tomamos tu usado */}
           <motion.div
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            style={{
-              background: `linear-gradient(135deg, ${BLUE}16 0%, ${BLUE}08 100%)`,
-              border: `1px solid ${BLUE}28`, borderRadius: 12,
-              padding: "clamp(24px, 5vw, 48px) clamp(20px, 4vw, 40px)",
-              display: "flex", flexDirection: "column", justifyContent: "space-between",
-              minHeight: 340, position: "relative", overflow: "hidden",
-            }}
+            className="bento-row"
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
           >
-            <div style={{ position: "absolute", bottom: -20, right: -20, opacity: 0.07 }}>
-              <RefreshCw size={220} color={BLUE} />
+            <div style={{ width: 64, height: 64, background: `${BLUE}0e`, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <RefreshCw size={30} style={{ color: BLUE }} />
             </div>
-            <div>
-              <div style={{ width: 52, height: 52, background: `${BLUE}18`, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 28 }}>
-                <RefreshCw size={26} style={{ color: BLUE }} />
-              </div>
-              <h3 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(28px, 3vw, 42px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase", marginBottom: 16, color: DARK }}>
-                TOMAMOS<br />TU <span style={{ color: BLUE }}>USADO</span>
+            <div className="bento-row-title">
+              <h3 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(26px, 3vw, 42px)", lineHeight: 1, textTransform: "uppercase", color: DARK, letterSpacing: "-0.02em" }}>
+                TOMAMOS TU <span style={{ color: BLUE }}>USADO</span>
               </h3>
-              <p style={{ fontFamily: BODY, fontSize: 15, color: TEXT2, lineHeight: 1.7, maxWidth: 340 }}>
-                Tasamos tu vehículo de forma justa y transparente. Lo tomamos como parte de pago para que el salto al próximo sea más fácil y más barato.
-              </p>
             </div>
-            <a
-              href="https://wa.me/5493442647442?text=Hola! Quiero saber cuánto vale mi usado"
-              target="_blank" rel="noopener noreferrer"
-              className="shimmer-btn"
-              style={{ marginTop: 32, display: "inline-flex", alignItems: "center", gap: 10, background: BLUE, color: "#fff", fontFamily: DISPLAY, fontWeight: 700, fontSize: 14, letterSpacing: "0.08em", padding: "13px 26px", clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%)", textDecoration: "none", alignSelf: "flex-start" }}
-            >
-              TASAR MI USADO <ArrowRight size={15} />
-            </a>
+            <p className="bento-row-desc" style={{ fontFamily: BODY, fontSize: 15, color: TEXT2, lineHeight: 1.75 }}>
+              Tasamos tu vehículo de forma justa y transparente. Lo tomamos como parte de pago para que el salto al próximo sea más fácil y más barato.
+            </p>
           </motion.div>
 
-          {/* RIGHT: Financiamos */}
+          <div style={{ height: 1, background: BORDER }} />
+
+          {/* Fila 2 — Financiamos */}
           <motion.div
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            style={{
-              background: `linear-gradient(135deg, ${RED}12 0%, ${RED}07 100%)`,
-              border: `1px solid ${RED}25`, borderRadius: 12,
-              padding: "36px 32px", position: "relative", overflow: "hidden",
-            }}
+            className="bento-row"
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.12 }}
           >
-            <div style={{ position: "absolute", bottom: -10, right: -10, opacity: 0.07 }}>
-              <CreditCard size={140} color={RED} />
+            <div style={{ width: 64, height: 64, background: `${RED}0c`, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <CreditCard size={30} style={{ color: RED }} />
             </div>
-            <div style={{ width: 48, height: 48, background: `${RED}14`, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
-              <CreditCard size={24} style={{ color: RED }} />
+            <div className="bento-row-title">
+              <h3 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(26px, 3vw, 42px)", lineHeight: 1, textTransform: "uppercase", color: DARK, letterSpacing: "-0.02em" }}>
+                FINANCIAMOS
+              </h3>
             </div>
-            <h3 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: 28, lineHeight: 1.1, textTransform: "uppercase", marginBottom: 12, color: DARK }}>
-              FINANCIAMOS
-            </h3>
-            <p style={{ fontFamily: BODY, fontSize: 14, color: TEXT2, lineHeight: 1.65 }}>
+            <p className="bento-row-desc" style={{ fontFamily: BODY, fontSize: 15, color: TEXT2, lineHeight: 1.75 }}>
               Planes en pesos adaptados a tu situación. Sin trámites complicados, cuotas que se ajustan a vos.
             </p>
           </motion.div>
@@ -732,14 +650,6 @@ function ContactSection() {
               ))}
             </div>
 
-            <a
-              href="https://wa.me/5493442647442"
-              target="_blank" rel="noopener noreferrer"
-              className="shimmer-btn"
-              style={{ display: "inline-flex", alignItems: "center", gap: 10, background: RED, color: "#fff", fontFamily: DISPLAY, fontWeight: 700, fontSize: 14, letterSpacing: "0.08em", padding: "14px 30px", clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%)", textDecoration: "none" }}
-            >
-              <MessageCircle size={16} /> CONSULTANOS POR WHATSAPP
-            </a>
           </div>
 
           {/* RIGHT: Hours card */}
@@ -757,7 +667,7 @@ function ContactSection() {
               <div key={day} style={{ marginBottom: 30 }}>
                 <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: TEXT2, letterSpacing: "0.14em", marginBottom: 12 }}>{day}</div>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <span style={{ background: BG2, fontFamily: DISPLAY, fontWeight: 800, fontSize: 32, padding: "8px 20px", clipPath: "polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%)", color: "rgba(13,20,37,0.6)", lineHeight: 1, display: "inline-block" }}>
+                  <span style={{ background: BG2, fontFamily: DISPLAY, fontWeight: 800, fontSize: 32, padding: "8px 20px", clipPath: "polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%)", color: DARK, lineHeight: 1, display: "inline-block" }}>
                     {open}
                   </span>
                   <div style={{ width: 22, height: 2.5, background: RED, transform: "rotate(-20deg)", flexShrink: 0 }} />
@@ -775,13 +685,14 @@ function ContactSection() {
 }
 
 // ── Telepase Banner ───────────────────────────────────────────────────────────
+const TELE = "#0a5c36"
 function TelepaseBanner() {
   return (
-    <div style={{ background: `${BLUE}08`, borderTop: `1px solid ${BLUE}18`, borderBottom: `1px solid ${BLUE}18` }}>
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "20px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
+    <div style={{ background: `${TELE}0c`, borderTop: `1px solid ${TELE}22`, borderBottom: `1px solid ${TELE}22` }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "18px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <div style={{ width: 40, height: 40, background: `${BLUE}14`, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <Zap size={18} style={{ color: BLUE }} />
+          <div style={{ position: "relative", width: 44, height: 44, flexShrink: 0 }}>
+            <Image src="/telepase%20logo.png" alt="TelePASE" fill style={{ objectFit: "contain" }} />
           </div>
           <div>
             <div style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 15, letterSpacing: "0.02em", color: DARK }}>Gestionamos tu Telepase</div>
@@ -791,9 +702,9 @@ function TelepaseBanner() {
         <a
           href="https://wa.me/5493442647442?text=Hola! Quiero información sobre el trámite del Telepase"
           target="_blank" rel="noopener noreferrer"
-          style={{ display: "inline-flex", alignItems: "center", gap: 8, border: `1.5px solid ${BLUE}`, color: BLUE, fontFamily: DISPLAY, fontWeight: 700, fontSize: 12, letterSpacing: "0.08em", padding: "9px 20px", textDecoration: "none", borderRadius: 4, whiteSpace: "nowrap", transition: "background 0.2s, color 0.2s", flexShrink: 0 }}
-          onMouseEnter={e => { e.currentTarget.style.background = BLUE; e.currentTarget.style.color = "#fff" }}
-          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = BLUE }}
+          style={{ display: "inline-flex", alignItems: "center", gap: 8, border: `1.5px solid ${TELE}`, color: TELE, fontFamily: DISPLAY, fontWeight: 700, fontSize: 12, letterSpacing: "0.08em", padding: "9px 20px", textDecoration: "none", borderRadius: 4, whiteSpace: "nowrap", transition: "background 0.2s, color 0.2s", flexShrink: 0 }}
+          onMouseEnter={e => { e.currentTarget.style.background = TELE; e.currentTarget.style.color = "#fff" }}
+          onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = TELE }}
         >
           <MessageCircle size={13} /> CONSULTAR
         </a>
@@ -819,51 +730,43 @@ function GestoriaSection() {
   return (
     <section id="gestoria" ref={ref} style={{ background: BG2, padding: "clamp(48px, 10vw, 96px) 0", borderTop: `1px solid ${BORDER}` }}>
       <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
-        <div className="grid lg:grid-cols-2" style={{ gap: "clamp(32px, 6vw, 80px)", alignItems: "center" }}>
+        <div className="grid lg:grid-cols-2" style={{ gap: "clamp(40px, 6vw, 96px)", alignItems: "start" }}>
 
           {/* LEFT */}
-          <motion.div
-            initial={{ opacity: 1 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }}
-          >
-            <div style={{ borderLeft: `5px solid ${BLUE}`, paddingLeft: 20, marginBottom: 20 }}>
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }}>
+            <div style={{ borderLeft: `5px solid ${BLUE}`, paddingLeft: 20, marginBottom: 24 }}>
               <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 8 }}>SERVICIOS ADICIONALES</div>
               <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(32px, 4.5vw, 58px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase", color: DARK }}>
                 GESTORÍA<br /><span style={{ color: BLUE }}>AUTOMOTOR</span>
               </h2>
             </div>
-            <p style={{ fontFamily: BODY, fontSize: 16, color: TEXT2, lineHeight: 1.7, marginBottom: 36, maxWidth: 440 }}>
+            <p style={{ fontFamily: BODY, fontSize: 16, color: TEXT2, lineHeight: 1.75, marginBottom: 36, maxWidth: 440 }}>
               Además de la compra y venta de vehículos, te ayudamos con todos los trámites del automotor. Sin colas, sin vueltas — nosotros nos encargamos del papeleo.
             </p>
             <a
-              href="https://wa.me/5493442647442?text=Hola! Necesito información sobre gestoría automotor"
+              href="https://wa.me/5493442577671?text=Hola! Necesito información sobre gestoría automotor"
               target="_blank" rel="noopener noreferrer"
               className="shimmer-btn"
-              style={{ display: "inline-flex", alignItems: "center", gap: 10, background: BLUE, color: "#fff", fontFamily: DISPLAY, fontWeight: 700, fontSize: 14, letterSpacing: "0.08em", padding: "14px 30px", clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%)", textDecoration: "none" }}
+              style={{ display: "inline-flex", alignItems: "center", gap: 10, background: WA, color: "#fff", fontFamily: DISPLAY, fontWeight: 700, fontSize: 14, letterSpacing: "0.08em", padding: "14px 30px", clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%)", textDecoration: "none" }}
             >
               <MessageCircle size={15} /> CONSULTAR POR WHATSAPP
             </a>
           </motion.div>
 
-          {/* RIGHT — servicios list */}
-          <motion.div
-            initial={{ opacity: 1 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, delay: 0.1 }}
-            style={{ background: BG, border: `1px solid ${BORDER}`, borderRadius: 12, padding: "clamp(24px, 5vw, 40px)" }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 28 }}>
-              <div style={{ width: 48, height: 48, background: `${BLUE}10`, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                <FileText size={22} style={{ color: BLUE }} />
-              </div>
-              <div style={{ fontFamily: DISPLAY, fontWeight: 800, fontSize: 18, color: DARK }}>Trámites que realizamos</div>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {/* RIGHT — trámites sin contenedor */}
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.1 }}>
+            <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 28 }}>TRÁMITES QUE REALIZAMOS</div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
               {servicios.map((s, i) => (
                 <motion.div
                   key={s}
-                  initial={{ opacity: 1 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.15 + i * 0.07 }}
-                  style={{ display: "flex", alignItems: "center", gap: 12 }}
+                  initial={{ opacity: 0, x: 8 }}
+                  animate={inView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.4, delay: 0.15 + i * 0.07 }}
+                  style={{ display: "flex", alignItems: "center", gap: 16, padding: "10px 0" }}
                 >
                   <CheckCircle size={15} style={{ color: BLUE, flexShrink: 0 }} />
-                  <span style={{ fontFamily: BODY, fontSize: 15, color: "rgba(13,20,37,0.72)" }}>{s}</span>
+                  <span style={{ fontFamily: BODY, fontSize: 15, color: DARK, lineHeight: 1.5 }}>{s}</span>
                 </motion.div>
               ))}
             </div>
@@ -887,7 +790,7 @@ function Footer() {
           {/* Brand */}
           <div>
             <div style={{ marginBottom: 16 }}>
-              <Image src="/logo.webp" alt="Chita Automotores" width={120} height={48} style={{ objectFit: "contain" }} />
+              <Image src="/logo.webp" alt="Chita Automotores" width={180} height={72} style={{ objectFit: "contain", width: "clamp(120px, 16vw, 180px)", height: "auto" }} />
             </div>
             <p style={{ fontFamily: BODY, fontSize: 13, color: TEXT2, lineHeight: 1.7 }}>
               Concesionaria de autos 0km y usados en Concepción del Uruguay, Entre Ríos. Desde 1984.
@@ -930,10 +833,13 @@ function Footer() {
                 <Clock size={14} style={{ color: BLUE, marginTop: 2, flexShrink: 0 }} />
                 <span style={{ fontFamily: BODY, fontSize: 13, color: TEXT2, lineHeight: 1.5 }}>Lun–Vie 9–17 · Sáb 8:30–12</span>
               </div>
-              <a href="https://wa.me/5493442647442" target="_blank" rel="noopener noreferrer" style={{ display: "flex", gap: 10, textDecoration: "none" }}>
-                <MessageCircle size={14} style={{ color: RED, marginTop: 2, flexShrink: 0 }} />
-                <span style={{ fontFamily: BODY, fontSize: 13, color: RED }}>WhatsApp</span>
-              </a>
+              <div style={{ display: "flex", gap: 10 }}>
+                <MessageCircle size={14} style={{ color: WA, marginTop: 2, flexShrink: 0 }} />
+                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                  <span style={{ fontFamily: BODY, fontSize: 13, color: TEXT2, lineHeight: 1.4 }}>Ventas: +54 9 3442 64-7442</span>
+                  <span style={{ fontFamily: BODY, fontSize: 13, color: TEXT2, lineHeight: 1.4 }}>Gestoría: +54 9 3442 57-7671</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -962,7 +868,7 @@ function FloatingWA() {
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 0, type: "spring", stiffness: 260, damping: 20 }}
       whileHover={{ scale: 1.12 }}
-      style={{ position: "fixed", bottom: "clamp(16px, 4vw, 28px)", right: "clamp(16px, 4vw, 28px)", width: "clamp(46px, 12vw, 56px)", height: "clamp(46px, 12vw, 56px)", background: RED, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 99, boxShadow: `0 6px 28px ${RED}55`, color: "#fff", textDecoration: "none" }}
+      style={{ position: "fixed", bottom: "clamp(16px, 4vw, 28px)", right: "clamp(16px, 4vw, 28px)", width: "clamp(46px, 12vw, 56px)", height: "clamp(46px, 12vw, 56px)", background: WA, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 99, boxShadow: `0 6px 28px ${WA}66`, color: "#fff", textDecoration: "none" }}
     >
       <MessageCircle size={24} />
     </motion.a>
@@ -979,9 +885,9 @@ export default function Page() {
       <BrandStrip />
       <FleetSection />
       <BentoSection />
-      <TestimonialsSection />
       <TelepaseBanner />
       <GestoriaSection />
+      <TestimonialsSection />
       <ContactSection />
       <Footer />
       <FloatingWA />
