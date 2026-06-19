@@ -492,6 +492,66 @@ function FleetSection() {
   )
 }
 
+// ── Usados ────────────────────────────────────────────────────────────────────
+function UsadosSection() {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: "-60px" })
+
+  const marcas = ["Renault", "Toyota", "Fiat", "Peugeot", "Ford", "Volkswagen", "Chevrolet", "Honda"]
+
+  return (
+    <section ref={ref} style={{ background: BG2, padding: "96px 0", borderTop: `1px solid ${BORDER}` }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px" }}>
+        <div className="grid lg:grid-cols-2" style={{ gap: "clamp(40px, 6vw, 96px)", alignItems: "center" }}>
+
+          {/* LEFT */}
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }}>
+            <div style={{ borderLeft: `5px solid ${BLUE}`, paddingLeft: 20, marginBottom: 24 }}>
+              <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 8 }}>VEHÍCULOS SEMINUEVOS</div>
+              <h2 style={{ fontFamily: DISPLAY, fontWeight: 900, fontSize: "clamp(32px, 4.5vw, 58px)", lineHeight: 1, letterSpacing: "-0.01em", textTransform: "uppercase", color: DARK }}>
+                TAMBIÉN<br /><span style={{ color: BLUE }}>VENDEMOS USADOS</span>
+              </h2>
+            </div>
+            <p style={{ fontFamily: BODY, fontSize: 16, color: TEXT2, lineHeight: 1.75, marginBottom: 36, maxWidth: 440 }}>
+              Contamos con un stock de vehículos usados en constante rotación. Escribinos por WhatsApp y te contamos qué tenemos disponible hoy.
+            </p>
+            <a
+              href={`https://wa.me/5493442647442?text=Hola! Me gustaría ver los autos usados disponibles`}
+              target="_blank" rel="noopener noreferrer"
+              className="shimmer-btn"
+              style={{ display: "inline-flex", alignItems: "center", gap: 10, background: WA, color: "#fff", fontFamily: DISPLAY, fontWeight: 700, fontSize: 14, letterSpacing: "0.08em", padding: "14px 30px", clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%)", textDecoration: "none" }}
+            >
+              <MessageCircle size={15} /> CONSULTAR STOCK DE USADOS
+            </a>
+          </motion.div>
+
+          {/* RIGHT — marcas */}
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.1 }}>
+            <div style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 11, color: BLUE, letterSpacing: "0.14em", marginBottom: 24 }}>MARCAS FRECUENTES EN STOCK</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+              {marcas.map((m, i) => (
+                <motion.div
+                  key={m}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={inView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ duration: 0.3, delay: 0.2 + i * 0.05 }}
+                  style={{ fontFamily: DISPLAY, fontWeight: 700, fontSize: 13, color: DARK, letterSpacing: "0.06em", padding: "10px 18px", border: `1.5px solid ${BORDER}`, borderRadius: 6 }}
+                >
+                  {m.toUpperCase()}
+                </motion.div>
+              ))}
+            </div>
+            <p style={{ fontFamily: BODY, fontSize: 13, color: TEXT2, marginTop: 20, lineHeight: 1.6 }}>
+              El stock varía semana a semana. Consultanos para ver la disponibilidad actual.
+            </p>
+          </motion.div>
+
+        </div>
+      </div>
+    </section>
+  )
+}
+
 // ── Bento — Finance ───────────────────────────────────────────────────────────
 function BentoSection() {
   const ref = useRef(null)
@@ -884,6 +944,7 @@ export default function Page() {
       <HeroSection />
       <BrandStrip />
       <FleetSection />
+      <UsadosSection />
       <BentoSection />
       <TelepaseBanner />
       <GestoriaSection />
